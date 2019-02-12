@@ -103,25 +103,25 @@ const ButtonSubmit = styled.button`
   border-radius: 3px;
 `;
 
-class ModalWindow extends React.Component {
- 
+class RegisterForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
   };
 
   render() {
-   const {signIn} = this.props;
     return (
       <ModalWrap
-        onClick={signIn}
+        onClick={this.props.closeModal}
+        data-close
       >
         <Modal
           onSubmit={this.handleSubmit}
         >
           <BtnClose>
             <Button
-              onClick={signIn}
+              onClick={this.props.closeModal}
+              data-close
             >
               x
             </Button>
@@ -150,4 +150,4 @@ class ModalWindow extends React.Component {
   }
 }
 
-export default ModalWindow;
+export default RegisterForm;

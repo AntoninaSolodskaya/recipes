@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import { instagram, facebook, twitter } from '../../icons';
 import ModalWindow from '../pages/ModalWindow';
+import AuthenticationSection from '../pages/AuthenticateSection';
+import RegisterSection from './RegisterSection';
 
 const HeaderBlock = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const HeaderBlock = styled.div`
   margin: 0 20px;
   padding: 20px 0;
 `;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: #fff;
@@ -26,12 +28,6 @@ const StyledLink = styled(Link)`
     transform: scale(1.2);
     color: #CD8D5F;
   }
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Wrap = styled.div`
@@ -168,22 +164,26 @@ const StyledButton = styled(ButtonLogin)`
 class Header extends React.Component {
 
   state = {
-    modal: '',
-  };
-  
-  showModal = () => {
-    this.setState({ modal: <ModalWindow closeModal={this.closeModal} />});
+    authenticated: false
   };
 
-  closeModal = event => {
-    const formData = event.target.dataset.close;
-      if (formData) {
-        this.setState({modal: ''});
-      }
-  };
+  handleSignIn = () => {
+    this.setState({
+      authenticated: true
+    })
+  }
+
+  handleSignOut = () => {
+    this.setState({
+      authenticated: false
+    });
+    this.props.history.push('/')
+  }
 
   render() {
-   
+
+   const { authenticated } = this.state;
+
     return (
       <HeaderBlock>
         <Wrap>
@@ -205,32 +205,21 @@ class Header extends React.Component {
               <List>
                 <StyledLink to="/blog">Blog</StyledLink>
               </List>
+              {authenticated &&
               <List>
                 <StyledLink to="/add-recipe">Submit</StyledLink>
-              </List>
-              <List>
-                <StyledButton
-                  type="button"
-                  onClick={this.showModal}
-                >
-                 Login
-                </StyledButton>
-              </List>
-              <List>
-                <StyledLink to="/">Register</StyledLink>
-              </List>
+              </List>}
             </NavList>
           </Nav>
-          <SocialLinks>
-            <StyledSocialLinks to="/">{facebook}</StyledSocialLinks>
-            <StyledSocialLinks to="/">{twitter}</StyledSocialLinks>
-            <StyledSocialLinks  to="/">{instagram}</StyledSocialLinks>
-          </SocialLinks>
+          {authenticated ? (
+            <AuthenticationSection signOut={this.handleSignOut} /> 
+          ):( 
+            <RegisterSection signIn={this.handleSignIn} />
+          )}
         </Wrap>
-        {this.state.modal}
       </HeaderBlock>
     );
   }
 }
 
-export default Header;
+export default withRouter(Header);

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import recipes from '../../data';
 
 const RecipeSection = styled.div`
-  width: calc(25% - 16px);
+ {* width: calc(25% - 16px);*}
   margin: 0 8px 20px 8px;
   min-height: 350px;
   display: flex;
@@ -99,33 +98,43 @@ const Time = styled.div`
 
 const Ingredient = Time.withComponent('div');
 
-class Recipe extends React.Component {
+const Button = styled.button`
+  text-decoration: none;
+  text-align: center; 
+  padding: 3px 3px; 
+  border: solid 1px #998d8d; 
+  border-radius: 5px; 
+  color: #9e8d8d; 
+  background-color: #ffffff; 
+  margin: 10px 6px;
+  font-family: 'Montserrat', sans-serif;
+`;
 
-  state = {
-    recipes,
-  }
+
+class Recipe extends React.Component {
 
   render() { 
 
-    const {
-      likes, title, tags, cookTime, image, id, servings,
-    } = this.props.recipe;
+    const {recipe, deleteRecipe} = this.props;
 
     return (
       <RecipeSection>
         <ImageWrap>
-          <ImageLink style={{ background: `url(${image})no-repeat center/cover` }} to={`/recipes/${id}`} />
+          <ImageLink  style={{ background: `url(${recipe.image})no-repeat center/cover` }} to={`/recipes/${recipe.id}`} />
         </ImageWrap>
         <LikesWrap>
-          <Likes>{likes}</Likes>
+          <Likes>{recipe.likes}</Likes>
           <Icon>&#10084;</Icon>
         </LikesWrap>
-        <TitleLink to={`/recipes/${id}`}>{title}</TitleLink>
-        <StyledParagraph>{tags}</StyledParagraph>
+        <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
+        <StyledParagraph>{recipe.tags}</StyledParagraph>
         <TimeSection>
-          <Time>{cookTime}</Time>
-          <Ingredient>{servings}ingredients</Ingredient>
+          <Time>{recipe.cookTime}</Time>
+          <Ingredient>{recipe.servings}ingredients</Ingredient>
         </TimeSection>  
+        <TimeSection>
+          <Button onClick={deleteRecipe(recipe.id)}>Delete</Button>
+        </TimeSection>
       </RecipeSection>
     )};
   };   

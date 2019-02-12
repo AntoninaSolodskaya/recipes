@@ -240,10 +240,10 @@ const TitleSpan = styled.span`
   font-family: sans-serif;
 `;
 
+
 class RecipePage extends React.Component {
 
   state = {
-    recipe: null,
     prevRecipe: null,
     nextRecipe: null,
   };
@@ -272,8 +272,9 @@ class RecipePage extends React.Component {
   }
 
   render() {
-    const { recipe, prevRecipe, nextRecipe } = this.state;
-   
+    const { prevRecipe, nextRecipe } = this.state;
+    const { recipe } = this.props;
+    
     if (recipe) {
       const {
         image, title, likes, dislike, servings, prepTime, cookTime, description, ingredients, steps,
@@ -316,7 +317,7 @@ class RecipePage extends React.Component {
             <Ingredients>
               <Item>Ingredients</Item>
               <ListWrap>
-                {ingredients.map((ingr, i) => (
+                {recipe.ingredients.map((ingr, i) => (
                   <ListItem key={i}>
                     <InputBlock id={`check${i}`} type="checkbox" />
                     <LabelBlock htmlFor={`check${i}`}>
@@ -330,7 +331,7 @@ class RecipePage extends React.Component {
             <StepsWrap>
               <Item>Directions</Item>
               <ListWrap>
-                {steps.map((number, i) => (
+                {recipe.steps.map((number, i) => (
                   <ListItem key={i}>
                     <Circle>
                       {i + 1}
@@ -343,6 +344,7 @@ class RecipePage extends React.Component {
               </ListWrap>
             </StepsWrap>
             <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" />
+            <Button>View</Button>
           </MainContentWrap>
 
           {prevRecipe && (

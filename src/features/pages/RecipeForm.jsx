@@ -33,12 +33,16 @@ const TitleWrap = styled.div`
 
 const Section = styled.div`
   display: flex;
-  width: 100%;
+  justify-content: space-between;
+  width: 60%;
+  padding: 20px 0;
+  margin: auto;
 `;
 
 const SubmitBlock = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   margin-top: 20px;
 `;
@@ -63,62 +67,80 @@ const Button = styled.button`
   color: #ffffff;
 `;
 
-const mapState = (state, ownProps) => {
-  const recipeId = ownProps.match.params.id;
+// const mapState = (state, ownProps) => {
+//   const recipeId = ownProps.match.params.id;
 
-  let recipe = {
-    title: '',
-    description: '',
-    servings: '',
-    prepTime: '',
-    cookTime: '',
-    tags: '',
-    ingredients: [],
-    likes: '',
-    dislike: '',
-    steps: []
-  }
+//   let recipe = {
+//     title: '',
+//     description: '',
+//     servings: '',
+//     prepTime: '',
+//     cookTime: '',
+//     tags: '',
+//     ingredients: [],
+//     likes: '',
+//     dislike: '',
+//     steps: []
+//   }
 
-  if (recipeId && state.recipes.length > 0) {
-    recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0]
-  }
+//   if (recipeId && state.recipes.length > 0) {
+//     recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0]
+//   }
 
-  return {
-    recipe
-  }
-}
+//   return {
+//     recipe
+//   }
+// }
 
-const actions = {
-  createRecipe,
-  updateRecipe
+// const actions = {
+//   createRecipe,
+//   updateRecipe
+// }
+
+const emptyRecipe ={
+  title: '',
+  servings: '',
+  cookTime: '',
+  tags: '',
+  likes: ''
 }
 
 class RecipeForm extends Component {
 
   state = {
-    recipe: Object.assign({}, this.props.recipe)
+    recipe: emptyRecipe
   }
+
+  componentDidMount() {
+    if (this.props.selectedRecipe !== null) {
+      this.setState({
+        recipe: this.props.selectedRecipe
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedRecipe !== this.props.selectedRecipe) {
+      this.setState({
+        recipe: nextProps.selectedRecipe || emptyRecipe
+      })
+    }
+  }
+
 
   onFormSubmit = (evt) => {
     evt.preventDefault();
     if (this.state.recipe.id) {
-      this.props.updateEvent(this.state.recipe);
-      this.props.history.goBack();
+      this.props.updatedRecipe(this.state.recipe);
+      // this.props.history.goBack();
     } else {
-      const newRecipe = {
-        ...this.state.recipe,
-        id: cuid(),
-        avatar: '/assets/user.png'
-      }
-      this.props.createRecipe(newRecipe)
-      this.props.history.push('/recipes')
+      this.props.createRecipe(this.state.recipe)
     }
-
   }
 
   onInputChange = (evt) => {
     const newRecipe = this.state.recipe;
-    newRecipe[evt.target.name] = evt.target.value
+    newRecipe[evt.target.name] = evt.target.value;
     this.setState({
       recipe: newRecipe
     })
@@ -137,55 +159,35 @@ class RecipeForm extends Component {
           </Title>
         </TitleWrap>
         <Wrapper>
-          <form onSubmit={this.onFormSubmit}>
+          <form onSubmit={this.onFormSubmit}> 
+          
             <SubmitBlock>
               <Section>
                 <label>Recipe Title</label>
                 <input name='title' type="text" onChange={this.onInputChange} value={recipe.title} placeholder="Recipe Title" />
               </Section>
               <Section>
-                <label>Description</label>
-                <input name='description' type="text" onChange={this.onInputChange} value={recipe.description} placeholder="Description" />
-              </Section>
-              <Section>
                 <label>Servings:</label>
-                <input name='servings' type="date" onChange={this.onInputChange} value={recipe.servings} placeholder="Description" />
-              </Section>
-              <Section>
-                <label>Previous Time:</label>
-                <input name='prepTime' type="date" onChange={this.onInputChange} value={recipe.prepTime} placeholder="Previous Time" />
+                <input name='servings' onChange={this.onInputChange} value={recipe.servings} type="text"  placeholder="Servings" />
               </Section>
               <Section>
                 <label>Cooking Time:</label>
-                <input name='cookTime' type="date" onChange={this.onInputChange} value={recipe.cookTime} placeholder="Cooking Time" />
+                <input name='cookTime' onChange={this.onInputChange} value={recipe.cookTime} type="text" placeholder="Cooking Time" />
               </Section>
               <Section>
                 <label>Tags</label>
-                <input name='tags' type="date" onChange={this.onInputChange} value={recipe.tags} placeholder="Tags" />
+                <input name='tags' onChange={this.onInputChange} value={recipe.tags} type="text"  placeholder="Tags" />
               </Section>
               <Section>
                 <label>Likes</label>
-                <input name='likes' type="date" onChange={this.onInputChange} value={recipe.likes} placeholder="Likes" />
-              </Section>
-              <Section>
-                <label>Dislikes</label>
-                <input name='dislike' type="date" onChange={this.onInputChange} value={recipe.dislike} placeholder="Dislikes" />
-              </Section>
-              <Section>
-                <label>Ingredients</label>
-                <input name='ingredients' type="text" onChange={this.onInputChange} value={recipe.ingredients} placeholder="Ingredients" />
-              </Section>
-              <Section>
-                <label>Steps</label>
-                <input name='steps' type="text" onChange={this.onInputChange} value={recipe.steps} placeholder="Steps" />
+                <input name='likes' onChange={this.onInputChange} value={recipe.likes} type="text" placeholder="Likes" />
               </Section>
               <SubmitBtn
-                type="button"
-                onClick={this.submitRecipe}
+                type="submit"
               >
                 Submit Recipe
               </SubmitBtn>
-              <Button onClick={this.props.history.goBack} type="button">Cancel</Button>
+              <Button  type="button" onClick={handleCancel}>Cancel</Button>
             </SubmitBlock>
           </form>
         </Wrapper>
@@ -194,4 +196,4 @@ class RecipeForm extends Component {
   }
 }
 
-export default connect(mapState, actions)(RecipeForm);
+export default RecipeForm;
