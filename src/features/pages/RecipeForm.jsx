@@ -1,199 +1,304 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import cuid from 'cuid';
 import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
+import { validate } from '../components/validation/index';
+import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, fileInput, step } from "../components/fields";
 
-
+const MainContainer = styled.div`
+  padding: 20px 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px 20px;
-  color: rgba(255,247,247,1);
   font-size: 16px;
-  background-color: rgba(0, 0, 0, 0.6);
-`;
-
-const Title = styled.h1`
-  padding: 30px 0;
-  box-sizing: content-box;
-  overflow: hidden;
-  font: normal 32px/2 "varela-round", Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
+  margin: 0 auto;
   text-overflow: ellipsis;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-  color: #CD8D5F;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
 `;
 
 const TitleWrap = styled.div`
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #A9A9A9;
-  background-color: rgba(0, 0, 0, 0.6);
 `;
 
-const Section = styled.div`
+const Title = styled.div`
+  padding: 30px 0;
+  box-sizing: content-box;
+  overflow: hidden;
+  color: #CD8D5F;
+  font: normal 32px/2 "varela-round", Helvetica, sans-serif;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+`;
+
+const Block = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 60%;
-  padding: 20px 0;
-  margin: auto;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  @media(max-width: 450px) {
+    width: 100%;
+    justify-content: center;
+`;
+
+const Label = styled.label`
+  width: 30%;
+  min-width: 110px;
+  color: #ffffff;
+  @media(max-width: 450px) {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
 `;
 
 const SubmitBlock = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+  @media(max-width: 450px) {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
-const SubmitBtn = styled.button`
+const Button = styled.button`
   border: 1px solid #E8E8E8;
+  border-radius: 5px;
   padding: 8px 27px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
+  color: #ffffff;
   background-color: initial;
   &:active {
     border: 1px solid #B67D54;
     background-color: #B67D54;
   }
+  @media(max-width: 450px) {
+    padding: 10px;
+    margin: 10px;
+  }
 `;
 
-const Button = styled.button`
-  font-size: 16px;
-  padding: 4px 10px;
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 55%;
+  @media(max-width: 450px) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+`;
+const BlockWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const WrapSelect = styled.div`
+  display: flex;
+  justify-content: flex-start;
   margin-bottom: 20px;
-  color: #ffffff;
+  @media(max-width: 450px) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
 `;
 
-// const mapState = (state, ownProps) => {
-//   const recipeId = ownProps.match.params.id;
+const course = [
+  { key: 'choose...', text: 'Choose...', value: 'choose...' },
+  { key: 'beverage', text: 'Beverage', value: 'beverage' },
+  { key: 'bread', text: 'Bread', value: 'bread' },
+  { key: 'breakfast and brunch', text: 'Breakfast and Brunch', value: 'breakfast and brunch' },
+  { key: 'desert', text: 'Desert', value: 'desert' },
+  { key: 'lunch and snack', text: 'Lunch and Snack', value: 'lunch and snack' },
+  { key: 'main dish', text: 'Main Dish', value: 'main dish' }
+];
 
-//   let recipe = {
-//     title: '',
-//     description: '',
-//     servings: '',
-//     prepTime: '',
-//     cookTime: '',
-//     tags: '',
-//     ingredients: [],
-//     likes: '',
-//     dislike: '',
-//     steps: []
-//   }
+const cuisine = [
+  { key: 'choose...', text: 'Choose...', value: 'choose...' },
+  { key: 'american', text: 'American', value: 'american' },
+  { key: 'chinese', text: 'Chinese', value: 'chinese' },
+  { key: 'french', text: 'French', value: 'french' },
+  { key: 'german', text: 'German', value: 'german' },
+  { key: 'italian', text: 'Italian', value: 'italian' },
+  { key: 'mediterranean', text: 'Mediterranean', value: 'mediterranean' },
+  { key: 'thai', text: 'Thai', value: 'thai' }
+];
 
-//   if (recipeId && state.recipes.length > 0) {
-//     recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0]
-//   }
+const skill = [
+  { key: 'choose...', text: 'Choose...', value: 'choose...' },
+  { key: 'easy', text: 'Easy', value: 'easy' },
+  { key: 'hard', text: 'Hard', value: 'hard' },
+  { key: 'medium', text: 'Medium', value: 'medium' }
+];
 
-//   return {
-//     recipe
-//   }
-// }
+const mapState = (state, ownProps) => {
+  const recipeId = ownProps.match.params.id;
 
-// const actions = {
-//   createRecipe,
-//   updateRecipe
-// }
+  let recipe = {};
 
-const emptyRecipe ={
-  title: '',
-  servings: '',
-  cookTime: '',
-  tags: '',
-  likes: ''
+  if (recipeId && state.recipes.length > 0) {
+    recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0];
+  }
+
+  return {
+    initialValues: recipe
+  }
+}
+
+const actions = {
+  createRecipe,
+  updateRecipe
 }
 
 class RecipeForm extends Component {
 
-  state = {
-    recipe: emptyRecipe
-  }
-
-  componentDidMount() {
-    if (this.props.selectedRecipe !== null) {
-      this.setState({
-        recipe: this.props.selectedRecipe
-      })
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedRecipe !== this.props.selectedRecipe) {
-      this.setState({
-        recipe: nextProps.selectedRecipe || emptyRecipe
-      })
-    }
-  }
-
-
-  onFormSubmit = (evt) => {
-    evt.preventDefault();
-    if (this.state.recipe.id) {
-      this.props.updatedRecipe(this.state.recipe);
-      // this.props.history.goBack();
+  onFormSubmit = values => {
+    console.log(values);
+    if (this.props.initialValues.id) {
+      this.props.updateRecipe(values);
+      this.props.history.goBack();
     } else {
-      this.props.createRecipe(this.state.recipe)
+      const newRecipe = {
+        ...values,
+        id: cuid().toString(),
+        image: '/assets/photo.jpg',
+      };
+      this.props.createRecipe(newRecipe);
+      this.props.history.push('/');
     }
   }
-
-  onInputChange = (evt) => {
-    const newRecipe = this.state.recipe;
-    newRecipe[evt.target.name] = evt.target.value;
-    this.setState({
-      recipe: newRecipe
-    })
-  }
-
+  
   render() {
-
-    const {handleCancel} = this.props;
-    const {recipe} = this.state;
+    const { handleSubmit, pristine, submitting } = this.props;
     return (
-
       <React.Fragment>
-        <TitleWrap>
-          <Title>
-            Submit a Recipe
-          </Title>
-        </TitleWrap>
-        <Wrapper>
-          <form onSubmit={this.onFormSubmit}> 
-          
-            <SubmitBlock>
-              <Section>
-                <label>Recipe Title</label>
-                <input name='title' type="text" onChange={this.onInputChange} value={recipe.title} placeholder="Recipe Title" />
-              </Section>
-              <Section>
-                <label>Servings:</label>
-                <input name='servings' onChange={this.onInputChange} value={recipe.servings} type="text"  placeholder="Servings" />
-              </Section>
-              <Section>
-                <label>Cooking Time:</label>
-                <input name='cookTime' onChange={this.onInputChange} value={recipe.cookTime} type="text" placeholder="Cooking Time" />
-              </Section>
-              <Section>
-                <label>Tags</label>
-                <input name='tags' onChange={this.onInputChange} value={recipe.tags} type="text"  placeholder="Tags" />
-              </Section>
-              <Section>
-                <label>Likes</label>
-                <input name='likes' onChange={this.onInputChange} value={recipe.likes} type="text" placeholder="Likes" />
-              </Section>
-              <SubmitBtn
-                type="submit"
-              >
-                Submit Recipe
-              </SubmitBtn>
-              <Button  type="button" onClick={handleCancel}>Cancel</Button>
-            </SubmitBlock>
+        <MainContainer>
+          <TitleWrap>
+            <Title>
+              Submit a Recipe
+            </Title>
+          </TitleWrap>
+          <form onSubmit={handleSubmit(this.onFormSubmit)}>
+            <Wrapper>
+              <Field
+                name="title"
+                component={renderField}
+                type="text"
+                label="Recipe Title"
+              />
+              <Block>
+                <Field
+                  name="description"
+                  component={renderTextarea}
+                  type="textarea"
+                  label="Description"
+                />
+              </Block>
+              <BlockWrap>
+                <Label>Direction</Label>
+                <Wrap>
+                  <FieldArray name="steps" component={step} />
+                </Wrap>
+              </BlockWrap>
+              <BlockWrap>
+                <Label>Ingredients</Label>
+                <Wrap>
+                  <FieldArray name="ingredients" component={ingredients} /> 
+                </Wrap>
+              </BlockWrap>   
+                <Field
+                  name="prepTime"
+                  component={renderNumberField}
+                  label="Prep Time"
+                  type="input-number"
+                  hint="minutes"
+                />
+                <Field
+                  name="cookTime"
+                  component={renderNumberField}
+                  label="Cook Time"
+                  type="input-number"
+                  hint="minutes"
+                />
+                <Field
+                  name="servings"
+                  component={renderNumberField}
+                  label="Servings"
+                  type="input-number"
+                />
+              <WrapSelect>
+                <Label>Course</Label>
+                <Field
+                  name="course"
+                  component={SelectInput}
+                  label="Choose..."
+                > 
+                  {course.map(option =>
+                    <option key={option.key} value={option.value}>{option.text}</option>
+                  )}
+                </Field>
+              </WrapSelect>
+              <WrapSelect>
+                <Label>Skill</Label>
+                <Field
+                  name="skill"
+                  component={SelectInput}
+                  label="Choose..."
+                > 
+                  {skill.map(option =>
+                    <option key={option.key} value={option.value}>{option.text}</option>
+                  )}
+                </Field>
+              </WrapSelect>
+              <WrapSelect>
+                <Label>Cuisine</Label>
+                <Field
+                  name="cuisine"
+                  component={SelectInput}
+                  label="Choose..."
+                > 
+                  {cuisine.map(option =>
+                    <option key={option.key} value={option.value}>{option.text}</option>
+                  )}
+                </Field>
+              </WrapSelect>
+              <Field 
+                name="tags"
+                component={renderField}
+                type="text"
+                label="Tags"
+                hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
+              />
+              {/* <Field
+                name="image"
+                component={fileInput}
+                className="file"
+                type="file"
+                label="Image"
+                accept=".jpg, .jpeg, .png"
+                hint="Required size:1140px by 500px or larger.Max file size:2 megabytes"
+              />   */}
+              <SubmitBlock>
+                <Button type="submit" disabled={pristine || submitting}>Submit Recipe</Button>
+                <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
+              </SubmitBlock>
+            </Wrapper>
           </form>
-        </Wrapper>
+        </MainContainer>   
       </React.Fragment>
     )
   }
 }
 
-export default RecipeForm;
+export default connect(mapState, actions)(reduxForm({ form: 'recipeForm', enableReinitialize: true, validate })(RecipeForm));

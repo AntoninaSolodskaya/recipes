@@ -8,7 +8,7 @@ const PictureBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 13px;
+  margin: 0 13px 20px 13px;
   &:before {
     content: "";
     display: block;

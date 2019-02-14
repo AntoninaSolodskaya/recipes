@@ -1,19 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import recipes from '../../data';
 import AvatarBlock from '../components/AvatarBlock';
 
 const RecipeWrap = styled.div`
-  max-width: 1140px;
+  min-width: 350px;
+  max-width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
 `;
 
-const Title = styled.h1`
+const Title = styled.h3`
   display: flex;
   flex-wrap: nowrap;
   text-align: center;
@@ -39,7 +40,8 @@ const Image = styled.div`
 `;
 
 const MainContentWrap = styled.div`
-  max-width: 630px;
+  max-width: 700px;
+  min-width: 595px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -184,6 +186,7 @@ const Circle = styled.span`
 const StepsWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   max-width: 480px;
   margin: 25px 5px;
   border-bottom: 1px solid #E8E8E8;
@@ -240,6 +243,22 @@ const TitleSpan = styled.span`
   font-family: sans-serif;
 `;
 
+const BtnForm = styled(Link)`
+`;
+
+const mapState = (state, ownProps) => {
+  const recipeId = ownProps.match.params.id;
+
+  let recipe = {};
+
+  if (recipeId && state.recipes.length > 0) {
+    recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0];
+  }
+
+  return {
+    recipe
+  }
+}
 
 class RecipePage extends React.Component {
 
@@ -248,36 +267,33 @@ class RecipePage extends React.Component {
     nextRecipe: null,
   };
 
+  // setRecipes = (idRecipe) => {
+  //   let recipes = this.state.recipes;
+  //   const recipesArr = recipes;
+  //   recipesArr.forEach((item, i) => {
+  //     if (idRecipe === item.id) {
+  //       this.setState({ recipes: item, prevRecipe: recipesArr[i - 1] ? recipesArr[i - 1] : null, nextRecipe: recipesArr[i + 1] });
+  //     }
+  //   });
+  // };
 
-  setRecipes = (idRecipe) => {
-    const recipesArr = recipes;
-    recipesArr.forEach((item, i) => {
-      if (idRecipe === item.id) {
-        console.log(item);
-        this.setState({ recipe: item, prevRecipe: recipesArr[i - 1] ? recipesArr[i - 1] : null, nextRecipe: recipesArr[i + 1] });
-        localStorage.setItem('recipe', JSON.stringify(this.props.match.params));
-        console.log(localStorage);
-      }
-    });
-  };
+  // componentDidMount() {
+  //   this.setRecipes(this.props.match.params.recipeId);
+  // }
 
-  componentDidMount() {
-    this.setRecipes(this.props.match.params.recipeId);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.recipeId !== nextProps.match.params.recipeId) {
-      this.setRecipes(nextProps.match.params.recipeId);
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.match.params.recipeId !== nextProps.match.params.recipeId) {
+  //     this.setRecipes(nextProps.match.params.recipeId);
+  //   }
+  // }
 
   render() {
     const { prevRecipe, nextRecipe } = this.state;
     const { recipe } = this.props;
-    
+
     if (recipe) {
       const {
-        image, title, likes, dislike, servings, prepTime, cookTime, description, ingredients, steps,
+        image, title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description
       } = recipe;
 
       return (
@@ -314,12 +330,17 @@ class RecipePage extends React.Component {
             <Description>
               {description}
             </Description>
+            <Description>
+              <Span style={{marginRight: '8px'}}>{course}</Span>
+              <Span style={{marginRight: '8px'}}>{skill}</Span>
+              <Span style={{marginRight: '8px'}}>{cuisine}</Span>
+            </Description>
             <Ingredients>
-              <Item>Ingredients</Item>
+              <Item>Ingredients:</Item>
               <ListWrap>
                 {recipe.ingredients.map((ingr, i) => (
                   <ListItem key={i}>
-                    <InputBlock id={`check${i}`} type="checkbox" />
+                    <InputBlock type="checkbox" />
                     <LabelBlock htmlFor={`check${i}`}>
                       <SpanList>{`${ingr.title}`}</SpanList>
                       <SpanList>{`${ingr.amount}`}</SpanList>
@@ -329,7 +350,7 @@ class RecipePage extends React.Component {
               </ListWrap>
             </Ingredients>
             <StepsWrap>
-              <Item>Directions</Item>
+              <Item>Directions:</Item>
               <ListWrap>
                 {recipe.steps.map((number, i) => (
                   <ListItem key={i}>
@@ -343,8 +364,8 @@ class RecipePage extends React.Component {
                 ))}
               </ListWrap>
             </StepsWrap>
-            <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" />
-            <Button>View</Button>
+            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
+            <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
           </MainContentWrap>
 
           {prevRecipe && (
@@ -376,4 +397,4 @@ RecipePage.contextTypes = {
   }),
 };
 
-export default RecipePage;
+export default connect(mapState)(RecipePage);

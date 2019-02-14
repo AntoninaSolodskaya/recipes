@@ -65,7 +65,7 @@ class AvatarBlock extends React.Component {
         <ContentWrap>
           <ItemSection>Categories</ItemSection>
           <ListWrapTags>
-            {tags.map((tag, i) => (
+            {tags && tags.map((tag, i) => (
               <ListItem key={i}>
                 <ContextList value={tag}>
                   <Span>{tag}</Span>

@@ -51,8 +51,83 @@ body {
 main {
  flex: 1 0 auto;
  min-width: 350px;
+ max-width: 980px;
  margin: 10px 10px;
 }
 footer {
  background: initial;
+}
+
+input{
+  min-height: 35px;
+  width: 65%;
+  padding: 0 15px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  font: normal 16px/2 "varela-round", Helvetica, sans-serif;
+  color: rgba(255,247,247,1);
+}
+  ::-webkit-input-placeholder {
+    color: #ffffff;
+    font-size: 16px;
+  }
+  ::-moz-placeholder {
+    color: #ffffff;
+    font-size: 16px;
+  }
+  :-ms-input-placeholder {
+    color: #ffffff;
+    font-size: 16px;
+  }
+  :-moz-placeholder { 
+    color: #ffffff;
+    font-size: 16px;
+  }
+
+.file {
+  width: 80%;
+}
+  @media only screen and (max-width: 450px) {
+    .file {
+    width: 100%;
+  }
+}
+
+.ingrediant{
+  width: 100%;
+}
+
+.amount{
+  width: 100%;
+}
+
+textarea{
+  resize: none;
+  max-height: 190px;   
+  padding: 15px 15px;
+  margin-bottom: 10px;
+  width: 52%;
+  background-color: initial;
+  border: 1px solid #b7b7b7;
+  border-radius: 4px; 
+  color: #ffffff;
+  font-size: 18px; 
+}
+@media only screen and (max-width: 450px) {
+  textarea{
+    width: 100%;
+  }
+}
+.labelWidth{
+  width: 210px;
+}
+select {
+  height: 100%;
+  border-radius: 5px;
+}
+@media only screen and (max-width: 450px) {
+  select {
+    width: 100%;
+  }
 }

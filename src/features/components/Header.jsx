@@ -38,7 +38,8 @@ const Wrap = styled.div`
   justify-content: space-around;
   align-items: center;
   @media(max-width: 414px) {
-    align-items: flex-end;
+    align-items: flex-start;
+    flex-direction: column;
   }
 `;
 
@@ -164,7 +165,7 @@ const StyledButton = styled(ButtonLogin)`
 class Header extends React.Component {
 
   state = {
-    authenticated: false
+    authenticated: false,
   };
 
   handleSignIn = () => {
@@ -183,7 +184,7 @@ class Header extends React.Component {
   render() {
 
    const { authenticated } = this.state;
-
+   
     return (
       <HeaderBlock>
         <Wrap>
@@ -207,7 +208,7 @@ class Header extends React.Component {
               </List>
               {authenticated &&
               <List>
-                <StyledLink to="/add-recipe">Submit</StyledLink>
+                <StyledLink to="/manage">Submit</StyledLink>
               </List>}
             </NavList>
           </Nav>

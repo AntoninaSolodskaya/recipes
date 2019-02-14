@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const RecipeSection = styled.div`
- {* width: calc(25% - 16px);*}
-  margin: 0 8px 20px 8px;
+  width: calc(25% - 16px);
+  margin: 0 20px 20px 20px;
   min-height: 350px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  justify-content: space-between;
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 9px 0.3px;
   border-radius: 5px;
@@ -106,7 +105,6 @@ const Button = styled.button`
   border-radius: 5px; 
   color: #9e8d8d; 
   background-color: #ffffff; 
-  margin: 10px 6px;
   font-family: 'Montserrat', sans-serif;
 `;
 
@@ -129,7 +127,7 @@ class Recipe extends React.Component {
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>
         <TimeSection>
-          <Time>{recipe.cookTime}</Time>
+          <Time>{recipe.cookTime}min</Time>
           <Ingredient>{recipe.servings}ingredients</Ingredient>
         </TimeSection>  
         <TimeSection>

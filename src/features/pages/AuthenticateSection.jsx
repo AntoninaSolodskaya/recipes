@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  padding-left: 10px;
 `;
 
 const Avatar = styled.div`

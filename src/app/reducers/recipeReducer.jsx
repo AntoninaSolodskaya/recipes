@@ -14,8 +14,11 @@ const initialState = [
     '\n' +
     'lkjkjlkljlkjljkll',
     servings: '4',
-    prepTime: '30min',
-    cookTime: '15min',
+    prepTime: '30',
+    cookTime: '15',
+    cuisine: 'american',
+    skill: 'easy',
+    course: 'bread',
     tags: ['lunch and snack, mediterranean, easy, healthy & delicious'],
     ingredients: [
       { title: 'Baby spinach leaves, rinsed and drained', amount: '10 oz' },
@@ -41,8 +44,11 @@ const initialState = [
     title: 'Main Dish',
     description: 'Sit amet est et sapien ullamcorper pharetra.',
     servings: '6',
-    prepTime: '10min',
-    cookTime: '8min',
+    prepTime: '10',
+    cookTime: '8',
+    cuisine: 'italian',
+    skill: 'hard',
+    course: 'desert',
     tags: ['main, dish, italian, hard, olives, salami'],
     ingredients: [
       { title: 'Cheese', amount: '3 oz' },
@@ -71,7 +77,11 @@ const initialState = [
 ];
 
 export const createRecipe = (state, payload) => {
-  return [...state, Object.assign({}, payload.recipe)]
+  return [
+    ...state.filter(recipe => recipe.id !== payload.recipe.id),
+    Object.assign({}, payload.recipe)
+    // ...state, Object.assign({}, payload.recipe)]
+  ]
 }
 
 export const updateRecipe = (state, payload) => {
