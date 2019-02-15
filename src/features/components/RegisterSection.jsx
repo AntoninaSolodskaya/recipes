@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SocialLinks = styled.div`
@@ -37,15 +36,14 @@ const List = styled.li`
   width: 100%;
 `;
 
-const RegisterSection = ({signIn}) => {
+const RegisterSection = ({signIn, register}) => {
   return (
     <SocialLinks>
       <List>
-        {/* <StyledLink to="/login" onClick={signIn}>Login</StyledLink> */}
         <Button onClick={signIn}>Login</Button>
       </List>
       <List>
-        <Button>Register</Button>
+        <Button onClick={register}>Register</Button>
       </List>
     </SocialLinks>
   )

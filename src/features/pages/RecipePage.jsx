@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import AvatarBlock from '../components/AvatarBlock';
 
 const RecipeWrap = styled.div`
@@ -196,54 +195,8 @@ const ContextList = styled.span`
   margin: 8px 0;
 `;
 
-const SliderLink = styled(Link)`
-  display: flex;
-  position: fixed;
-  top: 50%;
-  right: ${props => (props.right ? props.right : 'initial')};
-  left: ${props => (props.left ? props.left : 'initial')};
-  transform: translateY(-50%) ${props => (props.right ? 'translateX(100%)' : 'translateX(-100%)')};
-  width: 245px;
-  background: #CD8D5F;
-  text-decoration: none;
-  align-items: center;
-   &:hover{
-    right: ${props => (props.right ? '245px' : 'initial')};
-    left: ${props => (props.left ? '245px' : 'initial')};
-  }
-  -webkit-transition-duration: 0.7s; 
-  -moz-transition-duration: 0.7s;
-  -o-transition-duration: 0.7s;
-  transition-duration: 0.7s;
-`;
-
-const SpanSlider = styled.span`
-  color: #fff;
-  background: #CD8D5F;
-  font-size: 30px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-  align-items: center;
-  height: 50px;
-  width: 50px;
-  padding-bottom: 5px;
-`;
-
-const TitleImage = styled.span`
-  height: 50px;
-  width: 50px;
-`;
-
-const TitleSpan = styled.span`
-  flex: 1;
-  padding: 0 15px;
-  font-size: 15px;
-  font-family: sans-serif;
-`;
-
 const BtnForm = styled(Link)`
+  
 `;
 
 const mapState = (state, ownProps) => {
@@ -261,34 +214,7 @@ const mapState = (state, ownProps) => {
 }
 
 class RecipePage extends React.Component {
-
-  state = {
-    prevRecipe: null,
-    nextRecipe: null,
-  };
-
-  // setRecipes = (idRecipe) => {
-  //   let recipes = this.state.recipes;
-  //   const recipesArr = recipes;
-  //   recipesArr.forEach((item, i) => {
-  //     if (idRecipe === item.id) {
-  //       this.setState({ recipes: item, prevRecipe: recipesArr[i - 1] ? recipesArr[i - 1] : null, nextRecipe: recipesArr[i + 1] });
-  //     }
-  //   });
-  // };
-
-  // componentDidMount() {
-  //   this.setRecipes(this.props.match.params.recipeId);
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.match.params.recipeId !== nextProps.match.params.recipeId) {
-  //     this.setRecipes(nextProps.match.params.recipeId);
-  //   }
-  // }
-
   render() {
-    const { prevRecipe, nextRecipe } = this.state;
     const { recipe } = this.props;
 
     if (recipe) {
@@ -364,24 +290,9 @@ class RecipePage extends React.Component {
                 ))}
               </ListWrap>
             </StepsWrap>
-            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
+            <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" />
             <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
           </MainContentWrap>
-
-          {prevRecipe && (
-            <SliderLink left="50px" to={`/recipes/${prevRecipe.id}`}>
-              <TitleImage style={{ background: `url(${prevRecipe.image})no-repeat center/cover` }} />
-              <TitleSpan>{prevRecipe.title}</TitleSpan>
-              <SpanSlider>&larr;</SpanSlider>
-            </SliderLink>
-          )}
-          {nextRecipe && (
-          <SliderLink right="50px" to={`/recipes/${nextRecipe.id}`}>
-            <SpanSlider>&rarr;</SpanSlider>
-            <TitleSpan>{nextRecipe.title}</TitleSpan>
-            <TitleImage style={{ background: `url(${nextRecipe.image})no-repeat center/cover` }} />
-          </SliderLink>
-          )}
         </RecipeWrap>
       );
     }
@@ -390,11 +301,5 @@ class RecipePage extends React.Component {
     );
   }
 }
-
-RecipePage.contextTypes = {
-  router: PropTypes.shape({
-    history: PropTypes.object.isRequired,
-  }),
-};
 
 export default connect(mapState)(RecipePage);

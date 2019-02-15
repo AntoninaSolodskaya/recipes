@@ -9,7 +9,6 @@ import BlogPage from '../../features/pages/BlogPage';
 import RecipePage from '../../features/pages/RecipePage';
 import Members from '../../features/pages/Members';
 import MainContent from '../../features/pages/MainContent';
-import ModalWindow from '../../features/pages/ModalWindow';
 import RecipeForm from '../../features/pages/RecipeForm';
 import ModalManager from '../../features/pages/ModalManager';
 
@@ -35,7 +34,6 @@ class App extends Component {
               <Route exact path="/members" component={Members} />
               <Route exact path="/blog" component={Blog} />
               <Route exact path="/blog/:blogId" component={BlogPage} /> 
-              <Route exact path="/login" component={ModalWindow} />
             </Switch>
           </main>
           <Footer /> 

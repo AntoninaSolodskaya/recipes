@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import ImageWrap from '../../features/components/ImageWrap';
 import MainContent from '../pages/MainContent';
 import { deleteRecipe } from '../../app/actions/recipeActions/recipeActions';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const mapState = state => ({
-  recipes: state.recipes
+  recipes: state.recipes,
+  loading: state.async.loading
 });
 
 const actions = {
@@ -19,7 +21,8 @@ class Main extends Component {
   }
 
   render(){
-    const {recipes} = this.props;
+    const {recipes, loading} = this.props;
+    if (loading) return <LoadingComponent />
     return(
       <React.Fragment>
         <ImageWrap /> 

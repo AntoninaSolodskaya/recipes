@@ -78,10 +78,8 @@ const Button = styled.button`
 class MainContent extends React.Component {
 
   state = {
-    hasErrored: false,
-    isLoading: false,
     currentPage: 1,
-    currentPerPage: 8,
+    currentPerPage: 8
   };
 
   handleClick(event){
@@ -123,14 +121,6 @@ class MainContent extends React.Component {
       </Button>
     ));
 
-
-    if (this.props.hasErrored) {
-      return <div>Sorry! There was an error loading the recipes</div>;
-    }
-
-    if (this.props.isLoading) {
-      return <div>Loading…</div>;
-    }
     return(
       <RecipesWrap>
         <RecipeBlock>

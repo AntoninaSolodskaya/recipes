@@ -40,12 +40,12 @@ const Button = styled(Link)`
   }
 `;
 
-const AuthenticateSection = ({signOut}) => {
+const AuthenticateSection = ({signOut, currentUser}) => {
   return (
     <Container>
       <Button onClick={signOut} to="/">Sign Out</Button>
       <Avatar style={{ background: 'url(/assets/user.png) no-repeat center/cover' }} />
-      <Title>Name</Title>
+      <Title>{currentUser}</Title>
     </Container>
   )
 }

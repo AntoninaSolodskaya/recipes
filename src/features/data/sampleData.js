@@ -1,5 +1,6 @@
 
- const recipes = [
+const sampleData = {
+  recipes: [
     {
       id: 'fhkkpoiu',
       image: 'https://e-oboi.com/wp-content/uploads/2017/10/stock-photo-picturesque-morning-view-of-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure-717874486.jpg',
@@ -67,9 +68,9 @@
       },
     }
   ]
+}
 
-
-export default recipes;
+export default sampleData;
 
 export const blog = [{
   id: 'lkdfctr',

@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import ModalWindow from '../pages/ModalWindow';
 import AuthenticationSection from '../pages/AuthenticateSection';
 import RegisterSection from './RegisterSection';
+import { openModal } from '../../app/actions/modalActions/modalsActions';
+import { logout } from '../auth/authActions';
 
 const HeaderBlock = styled.div`
   display: flex;
@@ -79,10 +81,6 @@ const Nav = styled.div`
   }
 `;
 
-const StyledSocialLinks  = styled(StyledLink)`
-  line-height: 0;
-`;
-
 const Span = styled.span`
   position: relative;
   height: 4px;
@@ -153,38 +151,33 @@ const List = styled.li`
   width: 100%;
 `;
 
-const ButtonLogin = StyledLink.withComponent('button');
+const actions = {
+  openModal,
+  logout
+};
 
-const StyledButton = styled(ButtonLogin)`
-  background-color: initial;
-  border: none;
-  outline: none;
-  position: relative;
-`;
+const mapState = state => ({
+  auth: state.auth
+})
 
 class Header extends React.Component {
 
-  state = {
-    authenticated: false,
+  handleSignIn = () => {
+    this.props.openModal('LoginModal')
   };
 
-  handleSignIn = () => {
-    this.setState({
-      authenticated: true
-    })
-  }
+  handleRegister = () => {
+    this.props.openModal('RegisterModal')
+  };
 
   handleSignOut = () => {
-    this.setState({
-      authenticated: false
-    });
+    this.props.logout();
     this.props.history.push('/')
-  }
+  };
 
   render() {
-
-   const { authenticated } = this.state;
-   
+   const { auth } = this.props;
+   const authenticated = auth.authenticated;
     return (
       <HeaderBlock>
         <Wrap>
@@ -213,9 +206,15 @@ class Header extends React.Component {
             </NavList>
           </Nav>
           {authenticated ? (
-            <AuthenticationSection signOut={this.handleSignOut} /> 
+            <AuthenticationSection 
+              currentUser={auth.currentUser} 
+              signOut={this.handleSignOut} 
+            /> 
           ):( 
-            <RegisterSection signIn={this.handleSignIn} />
+            <RegisterSection 
+              signIn={this.handleSignIn} 
+              register={this.handleRegister} 
+            />
           )}
         </Wrap>
       </HeaderBlock>
@@ -223,4 +222,4 @@ class Header extends React.Component {
   }
 }
 
-export default withRouter(Header);
+export default withRouter(connect(mapState, actions)(Header));
