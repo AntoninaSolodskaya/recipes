@@ -264,33 +264,38 @@ class RecipePage extends React.Component {
             <Ingredients>
               <Item>Ingredients:</Item>
               <ListWrap>
-                {recipe.ingredients.map((ingr, i) => (
-                  <ListItem key={i}>
-                    <InputBlock type="checkbox" />
-                    <LabelBlock htmlFor={`check${i}`}>
-                      <SpanList>{`${ingr.title}`}</SpanList>
-                      <SpanList>{`${ingr.amount}`}</SpanList>
-                    </LabelBlock>
-                  </ListItem>
+                {recipe.ingredients &&
+                  Object.values(recipe.ingredients).map((ingr, i) => (
+                    <ListItem key={i}>
+                      <InputBlock type="checkbox" />
+                      <LabelBlock htmlFor={`check${i}`}>
+                        <SpanList>{`${ingr.title}`}</SpanList>
+                        <SpanList>{`${ingr.amount}`}</SpanList>
+                      </LabelBlock>
+                    </ListItem>
                 ))}
               </ListWrap>
             </Ingredients>
             <StepsWrap>
               <Item>Directions:</Item>
               <ListWrap>
-                {recipe.steps.map((number, i) => (
-                  <ListItem key={i}>
-                    <Circle>
-                      {i + 1}
-                    </Circle>
-                    <ContextList  value={number}>
-                      {number}
-                    </ContextList>
-                  </ListItem>
+                {recipe.steps &&
+                  Object.values(recipe.steps).map((number, i) => (
+                    <ListItem key={i}>
+                      <Circle>
+                        {i + 1}
+                      </Circle>
+                      <ContextList  value={number}>
+                        {number}
+                      </ContextList>
+                    </ListItem>
                 ))}
               </ListWrap>
             </StepsWrap>
-            <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" />
+            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
+              {recipe.author && Object.values(recipe.author).map((author, index) => (
+                <AvatarBlock key={index}  author={author}/>
+              ))}
             <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
           </MainContentWrap>
         </RecipeWrap>

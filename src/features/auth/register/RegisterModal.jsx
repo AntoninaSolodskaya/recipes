@@ -19,7 +19,7 @@ const ModalWrap = styled.div`
 
 const Modal = styled.div`
   max-width: 430px;
-  max-height: 335px;
+  max-height: 385px;
   height: 100%;
   width: 100%;
   background: #CD8D5F;

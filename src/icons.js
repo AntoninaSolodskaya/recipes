@@ -50,7 +50,7 @@ export const instagram = (
   </svg>
 );
 
-export const twitter =(
+export const twitter = (
   <svg id="Capa_1" x="0px" y="0px" width="25px" height="25px" viewBox="0 0 510 510" style={{ enableBackground: 'new 0 0 25 25' }} xmlSpace="preserve">
     <g>
       <g id="post-twitter">

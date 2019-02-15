@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import ImageWrap from '../../features/components/ImageWrap';
 import MainContent from '../pages/MainContent';
 import { deleteRecipe } from '../../app/actions/recipeActions/recipeActions';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const mapState = state => ({
-  recipes: state.recipes,
+  recipes: state.firestore.ordered.recipes,
   loading: state.async.loading
 });
 
@@ -35,4 +36,6 @@ class Main extends Component {
   }
 };
 
-export default connect(mapState, actions)(Main);
+export default connect(mapState, actions)(
+  firestoreConnect([{ collection: 'recipes' }])(Main)
+);

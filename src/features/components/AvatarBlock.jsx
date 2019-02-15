@@ -59,29 +59,12 @@ const ContextList = styled.span`
 
 class AvatarBlock extends React.Component {
   render() {
-    const { tags, author, title } = this.props;
+    const { author } = this.props;
     return (
-      <BlockWrap>
-        <ContentWrap>
-          <ItemSection>Categories</ItemSection>
-          <ListWrapTags>
-            {tags && tags.map((tag, i) => (
-              <ListItem key={i}>
-                <ContextList value={tag}>
-                  <Span>{tag}</Span>
-                </ContextList>
-              </ListItem>
-            ))}
-          </ListWrapTags>
-        </ContentWrap>
-        <ContentWrap>
-          <ItemSection>{title}</ItemSection>
-          <ContentBlock>
-            <Span>{author.name}</Span>
-            <AvatarSection style={{ background: `url(${author.avatar})no-repeat center/cover` }} />
-          </ContentBlock>
-        </ContentWrap>
-      </BlockWrap>
+      <ContentBlock>
+        <Span>{author.name}</Span>
+        <AvatarSection style={{ background: `url(${author.avatar})no-repeat center/cover` }} />
+      </ContentBlock>
     );
   }
 }

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { combineValidators, isRequired } from 'revalidate';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
- 
+import { registerUser } from '../authActions';
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,10 +39,35 @@ const ButtonSubmit = styled.button`
   border-radius: 3px;
 `;
 
-const RegisterForm = ({handleSubmit}) => {
+const Wrap = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const LabelError = styled.label`
+  background: #FF3249;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: Arial,sans-serif;
+  padding: 6px 10px;
+  border-radius: 4px;
+`;
+
+
+const actions = {
+  registerUser
+}
+
+const validate = combineValidators({
+  name: isRequired('name'),
+  email: isRequired('email'),
+  password: isRequired('password')
+})
+
+const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }) => {
   return (
     <Block>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(registerUser)}>
         <Section>
           <Label>Known Us:</Label>
           <Field
@@ -68,12 +95,17 @@ const RegisterForm = ({handleSubmit}) => {
             component="input"
           />
         </Section>
+        {error && 
+          <Wrap>
+            <LabelError>{error}</LabelError> 
+          </Wrap>
+        }
         <ButtonWrap>
-          <ButtonSubmit type="submit">Register</ButtonSubmit>
+          <ButtonSubmit disabled={invalid || submitting} type="submit">Register</ButtonSubmit>
         </ButtonWrap>
       </form>
     </Block>
   );
 }
 
-export default reduxForm({ form: 'loginForm'})(RegisterForm);
+export default connect(null, actions)(reduxForm({ form: 'loginForm', validate })(RegisterForm));

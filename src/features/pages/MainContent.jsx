@@ -77,58 +77,66 @@ const Button = styled.button`
 
 class MainContent extends React.Component {
 
-  state = {
-    currentPage: 1,
-    currentPerPage: 8
-  };
+  // state = {
+  //   currentPage: 1,
+  //   currentPerPage: 8
+  // };
 
-  handleClick(event){
-    this.setState({
-      currentPage: Number(event.target.id),
-    });
-  }
+  // handleClick(event){
+  //   this.setState({
+  //     currentPage: Number(event.target.id),
+  //   });
+  // }
 
   render() {
     const {recipes, deleteRecipe} = this.props;
-    const { currentPage, currentPerPage } = this.state;
+    // const { currentPage, currentPerPage } = this.state;
 
-    const indexOfLastRecipe = currentPage * currentPerPage;
-    const indexOfFirstRecipe = indexOfLastRecipe - currentPerPage;
-    const currentRecipe = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+    // const indexOfLastRecipe = currentPage * currentPerPage;
+    // const indexOfFirstRecipe = indexOfLastRecipe - currentPerPage;
+    // const currentRecipe = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
 
-    const renderRecipes = currentRecipe
-      .map((recipe, index) => (
-        <Recipe  
-          key={index} 
-          id={recipe.id}
-          recipe={recipe} 
-          deleteRecipe={deleteRecipe}
-        />
-      ))
+    // const renderRecipes = currentRecipe
+    //   recipes && recipes.map((recipe, index) => (
+    //     <Recipe  
+    //       key={index} 
+    //       id={recipe.id}
+    //       recipe={recipe} 
+    //       deleteRecipe={deleteRecipe}
+    //     />
+    //   ))
 
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(this.props.recipes.length / currentPerPage); i++) {
-      pageNumbers.push(i);
-    }
-    const renderPageNumbers = pageNumbers.map((number, i) => (
-      <Button
-        type="button"
-        key={i}
-        id={number}
-        onClick={this.handleClick.bind(this)}
-      >
-        {number}
-      </Button>
-    ));
+    // const pageNumbers = [];
+    // for (let i = 1; i <= Math.ceil(recipes.length / currentPerPage); i++) {
+    //   pageNumbers.push(i);
+    // }
+    // const renderPageNumbers = pageNumbers.map((number, i) => (
+    //   <Button
+    //     type="button"
+    //     key={i}
+    //     id={number}
+    //     onClick={this.handleClick.bind(this)}
+    //   >
+    //     {number}
+    //   </Button>
+    // ));
 
     return(
       <RecipesWrap>
         <RecipeBlock>
-          {renderRecipes}
+          {/* {renderRecipes} */}
+          {recipes && recipes.map((recipe, index) => (
+          <Recipe  
+            key={index} 
+            id={recipe.id}
+            recipe={recipe} 
+            deleteRecipe={deleteRecipe}
+          />
+        ))}
         </RecipeBlock>
-        <ButtonsWrap>
+        {/* <ButtonsWrap>
           {renderPageNumbers}
-        </ButtonsWrap>
+        </ButtonsWrap> */}
       </RecipesWrap>
     );
   }

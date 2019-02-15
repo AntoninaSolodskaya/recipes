@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withFirebase } from 'react-redux-firebase';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import AuthenticationSection from '../pages/AuthenticateSection';
 import RegisterSection from './RegisterSection';
 import { openModal } from '../../app/actions/modalActions/modalsActions';
-import { logout } from '../auth/authActions';
 
 const HeaderBlock = styled.div`
   display: flex;
@@ -152,12 +152,11 @@ const List = styled.li`
 `;
 
 const actions = {
-  openModal,
-  logout
+  openModal
 };
 
 const mapState = state => ({
-  auth: state.auth
+  auth: state.firebase.auth
 })
 
 class Header extends React.Component {
@@ -171,13 +170,13 @@ class Header extends React.Component {
   };
 
   handleSignOut = () => {
-    this.props.logout();
+    this.props.firebase.logout();
     this.props.history.push('/')
   };
 
   render() {
    const { auth } = this.props;
-   const authenticated = auth.authenticated;
+   const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
       <HeaderBlock>
         <Wrap>
@@ -207,7 +206,7 @@ class Header extends React.Component {
           </Nav>
           {authenticated ? (
             <AuthenticationSection 
-              currentUser={auth.currentUser} 
+              auth={auth} 
               signOut={this.handleSignOut} 
             /> 
           ):( 
@@ -222,4 +221,4 @@ class Header extends React.Component {
   }
 }
 
-export default withRouter(connect(mapState, actions)(Header));
+export default withRouter(withFirebase(connect(mapState, actions)(Header)));

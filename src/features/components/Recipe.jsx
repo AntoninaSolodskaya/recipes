@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import AvatarBlock from './AvatarBlock';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -15,6 +16,7 @@ const RecipeSection = styled.div`
   background: #FCFCFC;
   overflow: hidden;
   transition: all 0.5s ease-in-out;
+  min-width: 235px;
   @media(max-width: 850px) {
     width: calc(50% - 16px);
     }
@@ -110,11 +112,8 @@ const Button = styled.button`
 
 
 class Recipe extends React.Component {
-
   render() { 
-
     const {recipe, deleteRecipe} = this.props;
-
     return (
       <RecipeSection>
         <ImageWrap>
@@ -126,6 +125,11 @@ class Recipe extends React.Component {
         </LikesWrap>
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>
+        <LikesWrap>
+          {recipe.author && Object.values(recipe.author).map((author, index) => (
+            <AvatarBlock key={index}  author={author}/>
+          ))}
+        </LikesWrap>
         <TimeSection>
           <Time>{recipe.cookTime}min</Time>
           <Ingredient>{recipe.servings}ingredients</Ingredient>
