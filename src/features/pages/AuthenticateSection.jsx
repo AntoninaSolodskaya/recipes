@@ -9,7 +9,7 @@ const Container = styled.div`
   padding-left: 10px;
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   height: 45px;
   width: 45px;
   border-radius: 50%;
@@ -40,12 +40,12 @@ const Button = styled(Link)`
   }
 `;
 
-const AuthenticateSection = ({ signOut, auth }) => {
+const AuthenticateSection = ({ signOut, profile }) => {
   return (
     <Container>
       <Button onClick={signOut} to="/">Sign Out</Button>
-      <Avatar style={{ background: 'url(/assets/user.png) no-repeat center/cover' }} />
-      <Title>{auth.email}</Title>
+      <Avatar src={profile.photoURL || "/assets/user.png"} />
+      <Title>{profile.displayName}</Title>
     </Container>
   )
 }

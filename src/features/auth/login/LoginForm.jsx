@@ -2,8 +2,8 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { login } from '../authActions';
-import { instagram, facebook } from '../../../icons';
+import { login, socialLogin } from '../authActions';
+import { google, facebook } from '../../../icons';
 
 const Block = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ const ButtonWrap = styled.div`
 
 const ButtonSubmit = styled.button`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background-color: #ffffff;
   color: #CD8D5F;
@@ -49,17 +49,18 @@ const ButtonSubmit = styled.button`
   font-size: 17px;
   border: 0;
   border-radius: 4px;
-  margin: 10px auto;
+  margin: 7px auto;
   width: 100%;
 `;
 
 const BtnFacebook = styled(ButtonSubmit)`
-  background-color: #d32f2f;
+  justify-content: space-between;
+  background-color: #0d47a1;
   color: #ffffff;
 `;
 
 const BtnGoogle = styled(BtnFacebook)`
-  background-color: #33b5e5;
+  background-color: #d32f2f;
 `;
 
 const Wrap = styled.div`
@@ -83,10 +84,11 @@ const Span = styled.h4`
 `;
 
 const actions = {
-  login
+  login,
+  socialLogin
 }
 
-const LoginForm = ({ login, handleSubmit, error }) => {
+const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
   return (
     <Block>
       <form onSubmit={handleSubmit(login)} style={{ width: '100%'}}>
@@ -117,8 +119,8 @@ const LoginForm = ({ login, handleSubmit, error }) => {
           <ButtonWrap>
             <ButtonSubmit type="submit">Log In</ButtonSubmit>
             <Span>Or</Span>
-            <BtnFacebook>{facebook}Login with Facebook</BtnFacebook>
-            <BtnGoogle>{instagram}Login with Google</BtnGoogle>
+            <BtnFacebook onClick={() => socialLogin('facebook')}>{facebook}Login with Facebook</BtnFacebook>
+            <BtnGoogle onClick={() => socialLogin('google')}>{google}Login with Google</BtnGoogle>
           </ButtonWrap>
         </Container>
       </form>

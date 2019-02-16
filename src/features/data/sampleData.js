@@ -31,8 +31,8 @@ const sampleData = {
         'Quae quidem sapientes sequuntur duce natura tamquam',
       ],
       author: {
-        name: 'admin',
-        avatar: 'https://thedomesticatedman.files.wordpress.com/2015/11/cropped-img_963321.jpg',
+        displayName: 'admin',
+        avatarUrl: 'https://thedomesticatedman.files.wordpress.com/2015/11/cropped-img_963321.jpg',
       },
     }, {
       id: 'fghviop',
@@ -63,8 +63,8 @@ const sampleData = {
         'Accumsan porttitor, facilisis luctus, metus!',
       ],
       author: {
-        name: 'Russell Bowman',
-        avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress',
+        displayName: 'Russell Bowman',
+        avatarUrl: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress',
       },
     }
   ]

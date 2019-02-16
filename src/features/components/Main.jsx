@@ -22,7 +22,7 @@ class Main extends Component {
   }
 
   render(){
-    const {recipes, loading} = this.props;
+    const { recipes, loading } = this.props;
     if (loading) return <LoadingComponent />
     return(
       <React.Fragment>

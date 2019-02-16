@@ -156,7 +156,8 @@ const actions = {
 };
 
 const mapState = state => ({
-  auth: state.firebase.auth
+  auth: state.firebase.auth,
+  profile: state.firebase.profile
 })
 
 class Header extends React.Component {
@@ -175,7 +176,7 @@ class Header extends React.Component {
   };
 
   render() {
-   const { auth } = this.props;
+   const { auth, profile } = this.props;
    const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
       <HeaderBlock>
@@ -206,7 +207,7 @@ class Header extends React.Component {
           </Nav>
           {authenticated ? (
             <AuthenticationSection 
-              auth={auth} 
+              profile={profile} 
               signOut={this.handleSignOut} 
             /> 
           ):( 

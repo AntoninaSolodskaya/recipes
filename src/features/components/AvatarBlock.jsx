@@ -62,8 +62,8 @@ class AvatarBlock extends React.Component {
     const { author } = this.props;
     return (
       <ContentBlock>
-        <Span>{author.name}</Span>
-        <AvatarSection style={{ background: `url(${author.avatar})no-repeat center/cover` }} />
+        <Span>{author.displayName}</Span>
+        <AvatarSection style={{ background: `url(${author.avatarUrl})no-repeat center/cover` }} />
       </ContentBlock>
     );
   }

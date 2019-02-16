@@ -5,7 +5,8 @@ import cuid from 'cuid';
 import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
 import { validate } from '../components/validation/index';
-import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, fileInput, step } from "../components/fields";
+import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, step } from "../components/fields";
+import ImageUpload from '../pages/ImageUpload';
 
 const MainContainer = styled.div`
   padding: 20px 20px;
@@ -280,6 +281,7 @@ class RecipeForm extends Component {
                 label="Tags"
                 hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
               />
+              <ImageUpload />
               {/* <Field
                 name="image"
                 component={fileInput}

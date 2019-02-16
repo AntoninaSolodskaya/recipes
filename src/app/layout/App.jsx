@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { instagram, facebook, twitter } from '../../icons';
 import Header from '../../features/components/Header';
 import Footer from '../../features/components/Footer';
 import Main from '../../features/components/Main';
@@ -19,11 +18,7 @@ class App extends Component {
       <ModalManager />
         <div className="main-bg"></div>
         <div className="content-width">
-          <Header
-            facebook={facebook}
-            instagram={instagram}
-            twitter={twitter}
-          />
+          <Header />
           <main>
             <Switch>
               <Route exact path="/" component={Main} />

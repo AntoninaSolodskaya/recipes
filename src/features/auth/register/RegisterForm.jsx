@@ -10,10 +10,18 @@ const Block = styled.div`
   flex-direction: column;
 `;
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const WrapField = styled(Block)`
+  padding: 20px 20px;
+`;
+
 const Section = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
 `;
 
 const Label = styled.label`
@@ -42,6 +50,7 @@ const ButtonSubmit = styled.button`
 const Wrap = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 const LabelError = styled.label`
@@ -50,13 +59,34 @@ const LabelError = styled.label`
   font-size: 14px;
   font-family: Arial,sans-serif;
   padding: 6px 10px;
+  margin-top: 5px;
   border-radius: 4px;
 `;
 
+const Input = styled.input`
+  min-height: 35px;
+  @media(max-width: 450px) {
+    width: 100%;
+  }
+`;
 
 const actions = {
   registerUser
 }
+
+const customInput = ({ input, label, type, placeholder, meta: { touched, error } }) => (
+  <WrapField>
+    <Section>
+      <Label>{label}</Label>
+      <Input {...input} placeholder={placeholder} type={type} />
+    </Section>  
+    {touched && error && 
+      <Wrap>
+        <LabelError>{error}</LabelError> 
+      </Wrap>
+    }
+  </WrapField>
+);
 
 const validate = combineValidators({
   name: isRequired('name'),
@@ -67,43 +97,32 @@ const validate = combineValidators({
 const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }) => {
   return (
     <Block>
-      <form onSubmit={handleSubmit(registerUser)}>
-        <Section>
-          <Label>Known Us:</Label>
-          <Field
-            name="name"
-            type="text"
-            placeholder="Known Us"
-            component="input"
-          />
-        </Section>
-        <Section>
-          <Label>Email:</Label>
-          <Field
-            name="email"
-            type="email"
-            placeholder="Email"
-            component="input"
-          />
-        </Section>
-        <Section>
-          <Label>Password:</Label>
-          <Field
-            name="password"
-            type="password"
-            placeholder="Password"
-            component="input"
-          />
-        </Section>
-        {error && 
-          <Wrap>
-            <LabelError>{error}</LabelError> 
-          </Wrap>
-        }
+      <Form onSubmit={handleSubmit(registerUser)}>
+        <Field
+          name="name"
+          type="text"
+          label="Known Us:"
+          placeholder="Known Us"
+          component={customInput}
+        />
+        <Field
+          name="email"
+          type="email"
+          label="Email:"
+          placeholder="Email"
+          component={customInput}
+        /> 
+        <Field
+          name="password"
+          type="password"
+          label="Password:"
+          placeholder="Password"
+          component={customInput}
+        />
         <ButtonWrap>
           <ButtonSubmit disabled={invalid || submitting} type="submit">Register</ButtonSubmit>
         </ButtonWrap>
-      </form>
+      </Form>
     </Block>
   );
 }
