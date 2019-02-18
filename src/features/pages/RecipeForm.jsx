@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
 import { validate } from '../components/validation/index';
 import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, step } from "../components/fields";
-import ImageUpload from '../pages/ImageUpload';
+import Dropzone from 'react-dropzone';
 
 const MainContainer = styled.div`
   padding: 20px 20px;
@@ -115,6 +115,11 @@ const WrapSelect = styled.div`
   }
 `;
 
+const Item = styled.p`
+  display: flex;
+  justify-content: center;
+`;
+
 const course = [
   { key: 'choose...', text: 'Choose...', value: 'choose...' },
   { key: 'beverage', text: 'Beverage', value: 'beverage' },
@@ -173,7 +178,7 @@ class RecipeForm extends Component {
       const newRecipe = {
         ...values,
         id: cuid().toString(),
-        image: '/assets/photo.jpg',
+        // image: `${values.image}` || '/assets/photo.jpg',
       };
       this.props.createRecipe(newRecipe);
       this.props.history.push('/');
@@ -281,16 +286,19 @@ class RecipeForm extends Component {
                 label="Tags"
                 hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
               />
-              <ImageUpload />
-              {/* <Field
-                name="image"
-                component={fileInput}
-                className="file"
-                type="file"
-                label="Image"
-                accept=".jpg, .jpeg, .png"
-                hint="Required size:1140px by 500px or larger.Max file size:2 megabytes"
-              />   */}
+              <Block style={{ justifyContent: 'center', minWidth: '500px'}}>
+                <Field name="image" component={props =>
+                  <Dropzone
+                    {...props.input}
+                    multiple={false}
+                    onDrop = {() => props.input.onChange}
+                    style={{width : '500px', height : '65px', border : '2px dashed rgb(102, 102, 102)', borderRadius: '5px' }}>
+                  >
+                    <Item style={{ color: '#fff'}}>Try dropping a file here, or click to select file to upload.</Item>
+                  </Dropzone>
+                  } type="file"
+                />
+              </Block>
               <SubmitBlock>
                 <Button type="submit" disabled={pristine || submitting}>Submit Recipe</Button>
                 <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
