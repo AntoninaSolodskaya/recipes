@@ -5,8 +5,6 @@ const initialState = [];
 
 export const createRecipe = (state, payload) => {
   return [
-    // ...state.filter(recipe => recipe.id !== payload.recipe.id),
-    // Object.assign({}, payload.recipe)
     ...state, Object.assign({}, payload.recipe)
   ]
 };

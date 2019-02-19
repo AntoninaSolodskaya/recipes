@@ -99,7 +99,7 @@ const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }
     <Block>
       <Form onSubmit={handleSubmit(registerUser)}>
         <Field
-          name="name"
+          name="displayName"
           type="text"
           label="Known Us:"
           placeholder="Known Us"
@@ -127,4 +127,4 @@ const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }
   );
 }
 
-export default connect(null, actions)(reduxForm({ form: 'loginForm', validate })(RegisterForm));
+export default connect(null, actions)(reduxForm({ form: 'registerForm', validate })(RegisterForm));

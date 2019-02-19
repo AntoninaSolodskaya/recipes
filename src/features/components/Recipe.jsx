@@ -113,11 +113,15 @@ const Button = styled.button`
 
 class Recipe extends React.Component {
   render() { 
-    const {recipe, deleteRecipe} = this.props;
+    const { recipe, deleteRecipe } = this.props;
     return (
       <RecipeSection>
         <ImageWrap>
-          <ImageLink  style={{ background: `url(${recipe.image})no-repeat center/cover` }} to={`/recipes/${recipe.id}`} />
+          <ImageLink 
+            // style={{ background: `url(${recipe.image}) no-repeat center/cover` }} 
+            style={{background: 'url("/assets/photo.jpg")' }}
+            to={`/recipes/${recipe.id}`} 
+          />
         </ImageWrap>
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withFirestore } from 'react-redux-firebase';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import cuid from 'cuid';
 import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
 import { validate } from '../components/validation/index';
 import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, step } from "../components/fields";
-import Dropzone from 'react-dropzone';
+import FileInput from "../components/fields/FileInput";
 
 const MainContainer = styled.div`
   padding: 20px 20px;
@@ -115,11 +115,6 @@ const WrapSelect = styled.div`
   }
 `;
 
-const Item = styled.p`
-  display: flex;
-  justify-content: center;
-`;
-
 const course = [
   { key: 'choose...', text: 'Choose...', value: 'choose...' },
   { key: 'beverage', text: 'Beverage', value: 'beverage' },
@@ -168,6 +163,16 @@ const actions = {
 }
 
 class RecipeForm extends Component {
+ 
+  async componentDidMount() {
+    const {firestore, match} = this.props;
+    await firestore.setListener(`recipes/${match.params.id}`);
+  };
+
+  async componentWillUnmount() {
+    const {firestore, match} = this.props;
+    await firestore.unsetListener(`recipes/${match.params.id}`);
+  };
 
   onFormSubmit = values => {
     console.log(values);
@@ -175,15 +180,10 @@ class RecipeForm extends Component {
       this.props.updateRecipe(values);
       this.props.history.goBack();
     } else {
-      const newRecipe = {
-        ...values,
-        id: cuid().toString(),
-        // image: `${values.image}` || '/assets/photo.jpg',
-      };
-      this.props.createRecipe(newRecipe);
+      this.props.createRecipe(values);
       this.props.history.push('/');
     }
-  }
+  };
   
   render() {
     const { handleSubmit, pristine, submitting } = this.props;
@@ -286,19 +286,13 @@ class RecipeForm extends Component {
                 label="Tags"
                 hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
               />
-              <Block style={{ justifyContent: 'center', minWidth: '500px'}}>
-                <Field name="image" component={props =>
-                  <Dropzone
-                    {...props.input}
-                    multiple={false}
-                    onDrop = {() => props.input.onChange}
-                    style={{width : '500px', height : '65px', border : '2px dashed rgb(102, 102, 102)', borderRadius: '5px' }}>
-                  >
-                    <Item style={{ color: '#fff'}}>Try dropping a file here, or click to select file to upload.</Item>
-                  </Dropzone>
-                  } type="file"
-                />
-              </Block>
+              {/* <FileInput /> */}
+              <Field 
+                name="image"
+                component={FileInput}
+                type="file"
+                label="Upload image"
+              />
               <SubmitBlock>
                 <Button type="submit" disabled={pristine || submitting}>Submit Recipe</Button>
                 <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
@@ -311,4 +305,10 @@ class RecipeForm extends Component {
   }
 }
 
-export default connect(mapState, actions)(reduxForm({ form: 'recipeForm', enableReinitialize: true, validate })(RecipeForm));
+export default withFirestore(
+  connect(mapState, actions)(
+    reduxForm({ form: 'recipeForm', enableReinitialize: true, validate })(
+      RecipeForm
+    )
+  )
+);

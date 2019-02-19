@@ -63,7 +63,7 @@ class AvatarBlock extends React.Component {
     return (
       <ContentBlock>
         <Span>{author.displayName}</Span>
-        <AvatarSection style={{ background: `url(${author.avatarUrl})no-repeat center/cover` }} />
+        <AvatarSection style={{ background: `url(${author.photoURL})no-repeat center/cover` }} />
       </ContentBlock>
     );
   }

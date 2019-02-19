@@ -12,7 +12,7 @@ const mapState = state => ({
 });
 
 const actions = {
-  deleteRecipe
+  deleteRecipe,
 }
 
 class Main extends Component {

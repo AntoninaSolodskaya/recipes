@@ -54,7 +54,7 @@ export const registerUser = user =>
       if (user.additionalUserInfo.isNewUser) {
         await firestore.set(`users/${user.user.uid}`, {
           displayName: user.profile.displayName,
-          photoURL: user.profile.avatarUrl,
+          photoURL: user.profile.photoURL,
           createdAt: firestore.FieldValue.serverTimestamp()
         })
       }

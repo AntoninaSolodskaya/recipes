@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withFirestore } from 'react-redux-firebase';
+import { toastr } from 'react-redux-toastr';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AvatarBlock from '../components/AvatarBlock';
@@ -199,13 +201,12 @@ const BtnForm = styled(Link)`
   
 `;
 
-const mapState = (state, ownProps) => {
-  const recipeId = ownProps.match.params.id;
+const mapState = (state) => {
 
   let recipe = {};
 
-  if (recipeId && state.recipes.length > 0) {
-    recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0];
+  if (state.firestore.ordered.recipes && state.firestore.ordered.recipes[0]) {
+    recipe = state.firestore.ordered.recipes[0];
   }
 
   return {
@@ -214,6 +215,21 @@ const mapState = (state, ownProps) => {
 }
 
 class RecipePage extends React.Component {
+
+  async componentDidMount() {
+    const { firestore, match, history } = this.props;
+    let recipe = await firestore.get(`recipes/${match.params.id}`);
+    if (!recipe.exists) {
+      history.push('/recipes');
+      toastr.error('Sorry', 'Recipe not found')
+    }
+  }
+
+  // async componentWillUnmount() {
+  //   const { firestore, match } = this.props;
+  //   await firestore.unsetListener(`recipes/${match.params.id}`);
+  // }
+
   render() {
     const { recipe } = this.props;
 
@@ -307,4 +323,4 @@ class RecipePage extends React.Component {
   }
 }
 
-export default connect(mapState)(RecipePage);
+export default withFirestore(connect(mapState)(RecipePage));
