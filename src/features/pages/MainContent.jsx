@@ -74,10 +74,10 @@ const Button = styled.button`
   }
 `;
 
-
 class MainContent extends React.Component {
 
   // state = {
+   
   //   currentPage: 1,
   //   currentPerPage: 8
   // };
@@ -89,7 +89,7 @@ class MainContent extends React.Component {
   // }
 
   render() {
-    const {recipes, deleteRecipe} = this.props;
+    const { recipes, deleteRecipe, images } = this.props;
     // const { currentPage, currentPerPage } = this.state;
 
     // const indexOfLastRecipe = currentPage * currentPerPage;
@@ -123,17 +123,20 @@ class MainContent extends React.Component {
 
     return(
       <RecipesWrap>
-        <RecipeBlock>
-          {/* {renderRecipes} */}
-          {recipes && recipes.map((recipe, index) => (
-          <Recipe  
-            key={index} 
-            id={recipe.id}
-            recipe={recipe} 
-            deleteRecipe={deleteRecipe}
-          />
-        ))}
-        </RecipeBlock>
+        <RecipeBlock> 
+          {/* {renderRecipes}  */}
+          
+            {recipes && recipes.map((recipe, index) => (
+               <Recipe  
+                key={index}
+                id={recipe.id}
+                recipe={recipe}
+                deleteRecipe={deleteRecipe} 
+                images={images}
+             />
+            ))}
+              
+         </RecipeBlock>
         {/* <ButtonsWrap>
           {renderPageNumbers}
         </ButtonsWrap> */}

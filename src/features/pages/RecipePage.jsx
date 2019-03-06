@@ -231,18 +231,18 @@ class RecipePage extends React.Component {
   // }
 
   render() {
-    const { recipe } = this.props;
+    const { recipe, image } = this.props;
 
     if (recipe) {
       const {
-        image, title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description
+        title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description
       } = recipe;
 
       return (
         <RecipeWrap>
-          <Image style={{ background: `url(${image})no-repeat center/cover` }}>
+          <Image style={{ background: `url(${image.downloadURL})no-repeat center/cover` }}>
             <Title>{title}</Title>
-          </Image>
+          </Image> 
           <MainContentWrap>
             <BlockWrap>
               <TimeBlock>

@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import styled from 'styled-components';
 import ContentMembersPage from '../components/ContentMembersPage';
 import recipes from '../../data';
@@ -22,17 +25,25 @@ const Title = styled.h1`
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 `;
 
+const mapState = state => ({
+  recipes: state.firestore.ordered.recipes
+});
+
 class Members extends React.Component {
 
   render() {
+    const { recipes } = this.props;
     return (
       <BlogWrap >
         <Title>Member Directory</Title>
-        <ContentMembersPage recipe={recipes[0]} />
-        <ContentMembersPage recipe={recipes[1]} />
+        <ContentMembersPage recipes={recipes} />
       </BlogWrap>
     );
   }
 }
 
-export default Members;
+export default compose(connect(mapState, null)(
+  firestoreConnect([
+    { collection: 'recipes' }
+  ])( Members))
+);

@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
 import { validate } from '../components/validation/index';
 import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, step } from "../components/fields";
-import FileInput from "../components/fields/FileInput";
+import { FileInput } from "../components/fields/FileInput";
+import { DateInput } from "../components/fields/DateInput";
 
 const MainContainer = styled.div`
   padding: 20px 20px;
@@ -174,7 +175,7 @@ class RecipeForm extends Component {
     await firestore.unsetListener(`recipes/${match.params.id}`);
   };
 
-  onFormSubmit = values => {
+  onFormSubmit = (values) => {
     console.log(values);
     if (this.props.initialValues.id) {
       this.props.updateRecipe(values);
@@ -183,6 +184,7 @@ class RecipeForm extends Component {
       this.props.createRecipe(values);
       this.props.history.push('/');
     }
+
   };
   
   render() {
@@ -286,13 +288,18 @@ class RecipeForm extends Component {
                 label="Tags"
                 hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
               />
-              {/* <FileInput /> */}
+               {/* <Field
+                name="date"
+                type="text"
+                component={DateInput}
+                // dateFormat="YYYY-MM-DD HH:mm"
+                placeholder="Date and time of event"
+              /> */}
               <Field 
-                name="image"
-                component={FileInput}
-                type="file"
-                label="Upload image"
-              />
+                name="image" 
+                component={FileInput} 
+                label="Upload Image"
+               />
               <SubmitBlock>
                 <Button type="submit" disabled={pristine || submitting}>Submit Recipe</Button>
                 <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>

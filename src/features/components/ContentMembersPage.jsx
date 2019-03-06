@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import Avatar from '../pages/Avatar';
 
 const ContainerWrap = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 645px;
   margin: 0 auto;
-  padding: 20px 20px;
-  border-bottom: 1px solid #F2F2F2;
+  padding: 40px 20px;
+  border-bottom: 1px solid ;
   font-size: 16px;
   font-family: sans-serif;
   color: #333333;
@@ -16,46 +17,26 @@ const ContainerWrap = styled.div`
 const Block = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-top: 20px ;
+  padding: 20px 20px;
   font-size: 16px;
   font-family: sans-serif;
-`;
-
-const Avatar = styled.div`
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  margin-right: 15px;
-`;
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const Title = styled.span`
-  font-weight: bold;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #CD8D5F;
-`;
-
-const Recipes = styled.div`
-  margin-top: 5px;
+  border-bottom: 1px solid #F2F2F2;
 `;
 
 class ContentMembersPage extends React.Component {
   render() {
-    const {recipe} = this.props;
+    const {recipes} = this.props;
     return (
       <ContainerWrap className="theme-color">
-        <Block>
-          <Avatar style={{ background: `url(${recipe.author.avatar})no-repeat center/cover` }} />
-          <Section>
-            <Title>{recipe.author.name}</Title>
-            <Recipes>{recipe.likes}</Recipes>
-          </Section>
-        </Block>
+        
+        {recipes && recipes.map((recipe, index) => (
+         
+          <Block key={index} recipe={recipe}>
+            {recipe.author && Object.values(recipe.author).map((author, index) => (
+              <Avatar key={index}  author={author}/>
+            ))}
+          </Block>
+        ))}
       </ContainerWrap>
     );
   }

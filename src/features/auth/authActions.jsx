@@ -1,6 +1,5 @@
-import { SubmissionError, reset } from 'redux-form'
+import { SubmissionError } from 'redux-form'
 import { closeModal } from '../../app/actions/modalActions/modalsActions';
-import { toastr } from 'react-redux-toastr';
 
 export const login = creds => {
   return async (dispatch, getState, { getFirebase })=> {

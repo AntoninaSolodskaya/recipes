@@ -6,19 +6,20 @@ export const objectToArray = (object) => {
   }
 }
 
-export const createNewRecipe = (user, photoURL, recipe) => {
+export const createNewRecipe = ( user, photoURL, recipe, downloadURL, imageName ) => {
   return {
     ...recipe,
-    image: recipe.image || '/assets/photo.jpg',
-    // hostUid: user.uid,
-    // hostedBy: user.displayName,
-    // hostPhotoURL: photoURL || '/assets/user.png',
     author: {
       [user.uid]: {
         photoURL: photoURL || '/assets/user.png',
         displayName: user.displayName,
         authentication: true
       }
-    }
+    },
+    // image: {
+    //   [imageName]: {
+    //     downloadURL: downloadURL
+    //   }
+    // }
   }
 }

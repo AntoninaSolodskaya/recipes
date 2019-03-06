@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AvatarBlock from './AvatarBlock';
+import Image from '../pages/Image';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -110,19 +111,17 @@ const Button = styled.button`
   font-family: 'Montserrat', sans-serif;
 `;
 
+const Span = styled.span``;
+
 
 class Recipe extends React.Component {
-  render() { 
-    const { recipe, deleteRecipe } = this.props;
+ 
+  render() {  
+    const { recipe, deleteRecipe, images } = this.props;
+
     return (
-      <RecipeSection>
-        <ImageWrap>
-          <ImageLink 
-            // style={{ background: `url(${recipe.image}) no-repeat center/cover` }} 
-            style={{background: 'url("/assets/photo.jpg")' }}
-            to={`/recipes/${recipe.id}`} 
-          />
-        </ImageWrap>
+      <RecipeSection> 
+        <Image images={images} recipe={recipe} /> 
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>
           <Icon>&#10084;</Icon>
@@ -143,6 +142,6 @@ class Recipe extends React.Component {
         </TimeSection>
       </RecipeSection>
     )};
-  };   
+  }; 
 
 export default Recipe;

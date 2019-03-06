@@ -4,6 +4,7 @@ import { asyncActionStart, asyncActionFinish, asyncActionError } from '../../../
 import { fetchSampleData } from '../../../features/data/mockApi';
 import { createNewRecipe } from '../helpers';
 import firebase from '../../config/firebase';
+import cuid from 'cuid';
 
 export const fetchRecipes = (recipes) => {
   return {
@@ -12,28 +13,36 @@ export const fetchRecipes = (recipes) => {
   }
 };
 
-
-export const createRecipe = recipe => {
-  return async (dispatch, getState, { getFirestore }) => {
+export const createRecipe = (recipe) => {
+  return async (dispatch, getState, { getFirestore, getFirebase }) => {
     const firestore = getFirestore();
     const user = firebase.auth().currentUser;
-    const photoURL = getState().firebase.profile.photoURL;
+    const photoURL = getState().firebase.profile.photoURL; 
     let newRecipe = createNewRecipe(user, photoURL, recipe);
     try {
       let createdRecipe = await firestore.add(`recipes`, newRecipe);
-      await firestore.set(`recipe_author/${createdRecipe.id}_${user.uid}`, {
+      firestore.set(`recipe_author/${createdRecipe.id}_${user.uid}`, {
         recipeId: createdRecipe.id,
         userUid: user.uid,
         authentication: true
       });
+
+
+    
+    // let imageName = cuid();
+    // let uploadedFile = `recipe_image/${createdRecipe.id}_${imageName}`
+    // let downloadURL = await uploadedFile.uploadTaskSnapshot.downloadURL;
+    // firestore.set(uploadedFile, {
+    //     recipeId: createdRecipe.id,
+    //     imageId: imageName
+    //   });
+     
       toastr.success('Success', 'Recipe has been created');
     } catch (error) {
       toastr.error('Oops', 'Something went wrong');
     }
   };
 };
-
-
 
 export const updateRecipe = recipe => {
   return async dispatch => {
