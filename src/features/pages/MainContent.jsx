@@ -132,7 +132,7 @@ class MainContent extends React.Component {
                 id={recipe.id}
                 recipe={recipe}
                 deleteRecipe={deleteRecipe} 
-                images={images}
+                // images={images}
              />
             ))}
               

@@ -6,7 +6,7 @@ export const objectToArray = (object) => {
   }
 }
 
-export const createNewRecipe = ( user, photoURL, recipe, downloadURL, imageName ) => {
+export const createNewRecipe = ( user, photoURL, recipe, imageName, url ) => {
   return {
     ...recipe,
     author: {
@@ -16,10 +16,10 @@ export const createNewRecipe = ( user, photoURL, recipe, downloadURL, imageName 
         authentication: true
       }
     },
-    // image: {
-    //   [imageName]: {
-    //     downloadURL: downloadURL
-    //   }
-    // }
+    image: {
+      [imageName]: {
+        downloadURL: url || '/assets/photo.jpg'
+      }
+    }
   }
 }

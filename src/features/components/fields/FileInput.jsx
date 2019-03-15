@@ -75,18 +75,16 @@ const Img = styled.img`
   margin-left: 25px;
 `;
 
-console.log( cuid() );
-
 const storageService = firebase.storage();
 const storageRef = storageService.ref();
 let selectedFile;
 let imageName = cuid();
 
-export const handleChange = (e) => {
+export const uploadImage = (e) => {
   selectedFile = e.target.files[0];
-  const image = storageRef.child(`images/${selectedFile}`);
+  const image = storageRef.child(`images/${imageName}`);
   const uploadTask = image.put(selectedFile); 
-  
+    
   uploadTask.on('state_changed', (snapshot) => {
     let db = firebase.firestore();
     let dbRef = db.collection("images").doc(`${imageName}`);
@@ -95,22 +93,26 @@ export const handleChange = (e) => {
       downloadURL: uploadTask.snapshot.downloadURL
     })
     console.log(setData);
-  }, (error) => {
-    console.log(error);
-  }, () => {
+    let downloadURL = storageRef.child(`images/${imageName}`).getDownloadURL().then(function(url) {    
+      console.log(url);
+    })
     
+    }, (error) => {
+      console.log(error);
+    }, () => {
       console.log('success');
-  });
-}
+    });
+  }
 
 export const FileInput = ({ input, label, paragraph, meta: { touched, error }, ...inputProps }) => { 
- 
+  
     return (
       <Block>
       <Label>{label}</Label>
       <Section>
         <Paragraph>{paragraph}</Paragraph>
-        <Input {...inputProps} type="file" onChange={handleChange} />
+        <Input {...inputProps} type="file" onChange={uploadImage} />
+        
         {touched && error && 
           <SpanWrap>
             <Span>{error}

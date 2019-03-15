@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AvatarBlock from './AvatarBlock';
-import Image from '../pages/Image';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -121,7 +120,13 @@ class Recipe extends React.Component {
 
     return (
       <RecipeSection> 
-        <Image images={images} recipe={recipe} /> 
+        {/* <Image images={images} recipe={recipe} />   */}
+        <ImageWrap>
+          <ImageLink
+            style={{ background: `url(${recipe.downloadURL})no-repeat center/cover` }}
+            to={`/recipes/${recipe.id}`} 
+          />
+        </ImageWrap>    
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>
           <Icon>&#10084;</Icon>

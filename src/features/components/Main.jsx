@@ -9,7 +9,7 @@ import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const mapState = state => ({
   recipes: state.firestore.ordered.recipes,
-  images: state.firestore.ordered.images,
+  // images: state.firestore.ordered.images,
   loading: state.async.loading
 });
 
@@ -24,7 +24,7 @@ class Main extends Component {
   }
 
   render(){
-    const { recipes, loading, images } = this.props;
+    const { recipes, loading } = this.props;
     if (loading) return <LoadingComponent />
     
     return(
@@ -33,7 +33,7 @@ class Main extends Component {
         <MainContent 
           deleteRecipe={this.handleDeleteRecipe} 
           recipes={recipes}  
-          images={images}
+          // images={images}
         />
       </React.Fragment>
     );
