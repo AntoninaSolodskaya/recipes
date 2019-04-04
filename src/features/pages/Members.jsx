@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import styled from 'styled-components';
 import ContentMembersPage from '../components/ContentMembersPage';
-import recipes from '../../data';
 
 const BlogWrap = styled.div`
   max-width: 1140px;
@@ -12,7 +11,6 @@ const BlogWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-bottom: 1px solid #A9A9A9;
 `;
 
 const Title = styled.h1`
@@ -22,7 +20,7 @@ const Title = styled.h1`
   font: normal 32px/2 "varela-round", Helvetica, sans-serif;
   text-overflow: ellipsis;
   text-align: center;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  color: #CD8D5F;
 `;
 
 const mapState = state => ({

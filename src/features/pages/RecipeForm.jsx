@@ -6,13 +6,14 @@ import styled from 'styled-components';
 import { createRecipe, updateRecipe } from '../../app/actions/recipeActions/recipeActions';
 import { validate } from '../components/validation/index';
 import { renderField, SelectInput, renderTextarea, renderNumberField, ingredients, step } from "../components/fields";
-import { FileInput } from "../components/fields/FileInput";
-import { DateInput } from "../components/fields/DateInput";
+import FileInput from "../components/fields/FileInput";
+import firebase from '../../app/config/firebase';
 
 const MainContainer = styled.div`
   padding: 20px 20px;
   background-color: rgba(0, 0, 0, 0.6);
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -149,22 +150,49 @@ const mapState = (state, ownProps) => {
 
   let recipe = {};
 
-  if (recipeId && state.recipes.length > 0) {
-    recipe = state.recipes.filter(recipe => recipe.id === recipeId)[0];
+  if (recipeId && state.firestore.ordered.recipes.length > 0) {
+    recipe = state.firestore.ordered.recipes.filter(recipe => recipe.id === recipeId)[0];
   }
 
   return {
     initialValues: recipe
   }
-}
+};
 
 const actions = {
   createRecipe,
   updateRecipe
-}
+};
+
 
 class RecipeForm extends Component {
  
+  state={
+    url: "",
+    image: null
+  };
+  
+  onChange = e => {
+    if (e.target.files[0]) {
+      const image = e.target.files[0];
+      this.setState(() => ({image}));
+      const storageRef = firebase.storage().ref();
+      const uploadTask = storageRef.child("images/" + image.name).put(image);
+
+      uploadTask.on('state_changed', 
+      (snapshot) => {
+        storageRef.child(`images/${image.name}`).getDownloadURL().then(url => {       
+        this.setState({url})
+        console.log(url);
+        })
+      }, (error) => {
+        console.log(error);
+      }, () => {
+        
+      }
+    )}
+  };
+
   async componentDidMount() {
     const {firestore, match} = this.props;
     await firestore.setListener(`recipes/${match.params.id}`);
@@ -175,16 +203,21 @@ class RecipeForm extends Component {
     await firestore.unsetListener(`recipes/${match.params.id}`);
   };
 
-  onFormSubmit = (values) => {
-    console.log(values);
+  onFormSubmit = values => {
     if (this.props.initialValues.id) {
       this.props.updateRecipe(values);
       this.props.history.goBack();
     } else {
-      this.props.createRecipe(values);
-      this.props.history.push('/');
+     
+      const newRecipe = {
+        ...values,
+        photo: this.state.url || '/assets/photo.jpg'
+      }
+      values = newRecipe;
+      console.log(newRecipe)
+      this.props.createRecipe(newRecipe);
+      this.props.history.push('/');   
     }
-
   };
   
   render() {
@@ -288,17 +321,12 @@ class RecipeForm extends Component {
                 label="Tags"
                 hint="Separate tags with commas.For example: healthy, paleo, gluten-free"
               />
-               {/* <Field
-                name="date"
-                type="text"
-                component={DateInput}
-                // dateFormat="YYYY-MM-DD HH:mm"
-                placeholder="Date and time of event"
-              /> */}
               <Field 
-                name="image" 
+                name="photo" 
+                type="file"
                 component={FileInput} 
                 label="Upload Image"
+                onChange={this.onChange}
                />
               <SubmitBlock>
                 <Button type="submit" disabled={pristine || submitting}>Submit Recipe</Button>

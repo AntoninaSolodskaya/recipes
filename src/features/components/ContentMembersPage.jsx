@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Avatar from '../pages/Avatar';
+import AvatarBlock from './AvatarBlock';
 
 const ContainerWrap = styled.div`
   display: flex;
@@ -8,7 +8,6 @@ const ContainerWrap = styled.div`
   min-width: 645px;
   margin: 0 auto;
   padding: 40px 20px;
-  border-bottom: 1px solid ;
   font-size: 16px;
   font-family: sans-serif;
   color: #333333;
@@ -33,7 +32,7 @@ class ContentMembersPage extends React.Component {
          
           <Block key={index} recipe={recipe}>
             {recipe.author && Object.values(recipe.author).map((author, index) => (
-              <Avatar key={index}  author={author}/>
+              <AvatarBlock key={index}  author={author} />
             ))}
           </Block>
         ))}

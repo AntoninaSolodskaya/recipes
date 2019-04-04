@@ -4,23 +4,20 @@ import { asyncActionStart, asyncActionFinish, asyncActionError } from '../../../
 import { fetchSampleData } from '../../../features/data/mockApi';
 import { createNewRecipe } from '../helpers';
 import firebase from '../../config/firebase';
-import cuid from 'cuid';
-import { uploadImage } from '../../../features/components/fields/FileInput';
 
-export const fetchRecipes = (recipes) => {
-  return {
-    type: FETCH_RECIPES,
-    payload: recipes
-  }
-};
+// export const fetchRecipes = (recipes) => {
+//   return {
+//     type: FETCH_RECIPES,
+//     payload: recipes
+//   }
+// };
 
-export const createRecipe = (recipe) => {
+export const createRecipe = recipe => {
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     const firestore = getFirestore();
     const user = firebase.auth().currentUser;
     const photoURL = getState().firebase.profile.photoURL; 
-    let imageName = cuid();
-    let newRecipe = createNewRecipe(user, photoURL, recipe, imageName);
+    let newRecipe = createNewRecipe(user, photoURL, recipe);
     try {
       let createdRecipe = await firestore.add(`recipes`, newRecipe);
       firestore.set(`recipe_author/${createdRecipe.id}_${user.uid}`, {
@@ -28,13 +25,6 @@ export const createRecipe = (recipe) => {
         userUid: user.uid,
         authentication: true
       });
-    
-    const uploadedFile = `recipe_image/${createdRecipe.id}_${imageName}`
-    firestore.set(uploadedFile,{
-      recipeId: createdRecipe.id,
-      id: imageName,
-    }) 
-    
       toastr.success('Success', 'Recipe has been created');
     } catch (error) {
       toastr.error('Oops', 'Something went wrong');
@@ -59,24 +49,50 @@ export const updateRecipe = recipe => {
 };
 
 export const deleteRecipe = recipeId => {
-  return {
-    type: DELETE_RECIPE,
-    payload: {
-      recipeId
-    }
-  }
-};
-
-export const loadRecipes = () => {
-  return async dispatch => {
+  return async (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
     try {
-      dispatch(asyncActionStart())
-      let recipes = await fetchSampleData();
-      dispatch(fetchRecipes(recipes))
-      dispatch(asyncActionFinish());
+      await firestore.delete(`recipes/${recipeId}`)
     } catch (error) {
       console.log(error);
-      dispatch(asyncActionError());
     }
-  }
+  };
 };
+
+// export const loadRecipes = () => {
+//   return async dispatch => {
+//     try {
+//       dispatch(asyncActionStart())
+//       let recipes = await fetchSampleData();
+//       dispatch(fetchRecipes(recipes))
+//       dispatch(asyncActionFinish());
+//     } catch (error) {
+//       console.log(error);
+//       dispatch(asyncActionError());
+//     }
+//   }
+// };
+
+// export const getRecipe = () => 
+//   async (dispatch, getState) => {
+//     let today = new Date(Date.now());
+//     const firestore = firebase.firestore();
+//     const recipesQuery = firestore.collection('recipes').where('date', '>=', today);
+//     console.log(recipesQuery);
+//     try {
+//       dispatch(asyncActionStart());
+//       let querySnap = await recipesQuery.get();
+//       let recipes = [];
+
+//       for (let i=0; i > querySnap.docs.length; i++) {
+//         let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id};
+//         recipes.push(evt);
+//       }
+//       dispatch({type: FETCH_RECIPES, payload: {recipes}})
+//       dispatch(asyncActionFinish());
+//       console.log(recipes);
+//     } catch (error) {
+//       console.log(error);
+//       dispatch(asyncActionFinish());
+//     }
+//   }

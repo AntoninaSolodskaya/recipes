@@ -201,12 +201,14 @@ const BtnForm = styled(Link)`
   
 `;
 
-const mapState = (state) => {
+const mapState = (state, ownProps) => {
+  
+  const recipeId = ownProps.match.params.id;
 
   let recipe = {};
 
-  if (state.firestore.ordered.recipes && state.firestore.ordered.recipes[0]) {
-    recipe = state.firestore.ordered.recipes[0];
+  if (recipeId && state.firestore.ordered.recipes.length > 0) {
+    recipe = state.firestore.ordered.recipes.filter(recipe => recipe.id === recipeId)[0];
   }
 
   return {
@@ -225,22 +227,22 @@ class RecipePage extends React.Component {
     }
   }
 
-  // async componentWillUnmount() {
-  //   const { firestore, match } = this.props;
-  //   await firestore.unsetListener(`recipes/${match.params.id}`);
-  // }
+  async componentWillUnmount() {
+    const { firestore, match } = this.props;
+    await firestore.unsetListener(`recipes/${match.params.id}`);
+  }
 
   render() {
-    const { recipe, image } = this.props;
+    const { recipe } = this.props;
 
     if (recipe) {
       const {
-        title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description
+        title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description, photo
       } = recipe;
 
       return (
         <RecipeWrap>
-          <Image style={{ background: `url(${image.downloadURL})no-repeat center/cover` }}>
+          <Image style={{ background: `url(${photo})no-repeat center/cover` }}>
             <Title>{title}</Title>
           </Image> 
           <MainContentWrap>
@@ -308,10 +310,14 @@ class RecipePage extends React.Component {
                 ))}
               </ListWrap>
             </StepsWrap>
-            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
+            <LikesBlock>
+              <Item>Recipe By:</Item>
               {recipe.author && Object.values(recipe.author).map((author, index) => (
                 <AvatarBlock key={index}  author={author}/>
               ))}
+            </LikesBlock>
+            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
+              
             <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
           </MainContentWrap>
         </RecipeWrap>

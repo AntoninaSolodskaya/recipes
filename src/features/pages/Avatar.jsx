@@ -28,6 +28,12 @@ const Title = styled.span`
   color: #CD8D5F;
 `;
 
+const Span = styled.span`
+  color: #CD8D5F;
+  font-weight: bold;
+`;
+
+
 
 class Avatar extends React.Component {
   render() {
@@ -37,6 +43,7 @@ class Avatar extends React.Component {
         <AvatarImg style={{ background: `url(${author.photoURL || "/assets/user.png"})no-repeat center/cover` }} />
         <Section>
           <Title>{author.displayName}</Title>
+          <Span>{this.getTime()}</Span>
         </Section>
       </Block>
     );

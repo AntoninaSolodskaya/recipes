@@ -110,20 +110,16 @@ const Button = styled.button`
   font-family: 'Montserrat', sans-serif;
 `;
 
-const Span = styled.span``;
-
 
 class Recipe extends React.Component {
  
   render() {  
-    const { recipe, deleteRecipe, images } = this.props;
-
+    const { recipe, deleteRecipe } = this.props;
     return (
       <RecipeSection> 
-        {/* <Image images={images} recipe={recipe} />   */}
         <ImageWrap>
           <ImageLink
-            style={{ background: `url(${recipe.downloadURL})no-repeat center/cover` }}
+            style={{ background: `url(${recipe.photo})no-repeat center/cover` }}
             to={`/recipes/${recipe.id}`} 
           />
         </ImageWrap>    
@@ -133,11 +129,7 @@ class Recipe extends React.Component {
         </LikesWrap>
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>
-        <LikesWrap>
-          {recipe.author && Object.values(recipe.author).map((author, index) => (
-            <AvatarBlock key={index}  author={author}/>
-          ))}
-        </LikesWrap>
+
         <TimeSection>
           <Time>{recipe.cookTime}min</Time>
           <Ingredient>{recipe.servings}ingredients</Ingredient>

@@ -1,69 +1,50 @@
 import React from 'react';
 import styled from 'styled-components';
-
-const BlockWrap = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  padding: 35px 0;
-`;
-
-const ListWrapTags = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 0;
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  list-style-type: none;
-  padding: 0;
-`;
-
-const ContentWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-right: 25px;
-`;
+import moment from 'moment';
 
 const ContentBlock = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-`;
-
-const ItemSection = styled.p`
-  font-size: 12px;
-  font-family: sans-serif;
+  justify-content: flex-start;
+  width: 100%;
 `;
 
 const Span = styled.span`
   color: #CD8D5F;
   font-weight: bold;
+  margin: 0 20px;
 `;
 
 const AvatarSection = styled.div`
-  height: 32px;
-  width: 32px;
+  height: 70px;
+  width: 70px;
   border-radius: 50%;
-  margin-left: 12px;
+  margin: 0 20px 0 12px;
 `;
 
 const ContextList = styled.span`
   margin: 8px 5px 8px 0;
+  color: #CD8D5F;
+  font-family: sans-serif;
+  font-size: 18px;
 `;
 
 class AvatarBlock extends React.Component {
+  getTime = () => {
+    var dateTime = moment().format('YYYY-MM-DD');
+    return dateTime    
+  };
   render() {
     const { author } = this.props;
+   
+    
+
     return (
       <ContentBlock>
-        <Span>{author.displayName}</Span>
         <AvatarSection style={{ background: `url(${author.photoURL})no-repeat center/cover` }} />
+        <Span>{author.displayName}</Span>
+        <ContextList>{this.getTime()}</ContextList>
       </ContentBlock>
     );
   }

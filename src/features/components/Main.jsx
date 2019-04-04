@@ -9,7 +9,6 @@ import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const mapState = state => ({
   recipes: state.firestore.ordered.recipes,
-  // images: state.firestore.ordered.images,
   loading: state.async.loading
 });
 
@@ -18,22 +17,21 @@ const actions = {
 }
 
 class Main extends Component {
-  
+
   handleDeleteRecipe = (recipeId) => () => {
     this.props.deleteRecipe(recipeId);
-  }
+  };
 
   render(){
-    const { recipes, loading } = this.props;
-    if (loading) return <LoadingComponent />
-    
+    const { recipes } = this.props;
+    // if (loading) return <LoadingComponent />
+
     return(
       <React.Fragment>
         <ImageWrap /> 
         <MainContent 
           deleteRecipe={this.handleDeleteRecipe} 
           recipes={recipes}  
-          // images={images}
         />
       </React.Fragment>
     );
@@ -42,7 +40,6 @@ class Main extends Component {
 
 export default compose(connect(mapState, actions)(
   firestoreConnect([
-    { collection: 'recipes' },
-    { collection: 'images' }
+    { collection: 'recipes' }  
   ])(Main))
 );
