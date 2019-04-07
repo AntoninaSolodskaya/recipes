@@ -31,20 +31,15 @@ const ContextList = styled.span`
 `;
 
 class AvatarBlock extends React.Component {
-  getTime = () => {
-    var dateTime = moment().format('YYYY-MM-DD');
-    return dateTime    
-  };
   render() {
     const { author } = this.props;
-   
-    
+    let newDate = author.joinDate;
 
     return (
       <ContentBlock>
         <AvatarSection style={{ background: `url(${author.photoURL})no-repeat center/cover` }} />
         <Span>{author.displayName}</Span>
-        <ContextList>{this.getTime()}</ContextList>
+        <ContextList>{moment(newDate, 'DD.MM.YYYY').format('YYYY/MM/DD')}</ContextList>
       </ContentBlock>
     );
   }

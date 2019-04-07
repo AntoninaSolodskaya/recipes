@@ -1,5 +1,5 @@
 import {toastr} from 'react-redux-toastr';
-import { DELETE_RECIPE, UPDATE_RECIPE, FETCH_RECIPES } from './recipeConstants';
+import { UPDATE_RECIPE, FETCH_RECIPES } from './recipeConstants';
 import { asyncActionStart, asyncActionFinish, asyncActionError } from '../../../features/async/asyncActions';
 import { fetchSampleData } from '../../../features/data/mockApi';
 import { createNewRecipe } from '../helpers';
@@ -33,17 +33,12 @@ export const createRecipe = recipe => {
 };
 
 export const updateRecipe = recipe => {
-  return async dispatch => {
+  return async (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
     try {
-      dispatch({
-        type: UPDATE_RECIPE,
-        payload: {
-          recipe
-        }
-      });
-      toastr.success('Success', 'Recipe has been updated')
+      await firestore.update(`recipes/${recipe.id}`, recipe)
     } catch (error) {
-      toastr.error('Oops', 'Something went wrong')
+      console.log(error);
     }
   };
 };
@@ -73,26 +68,50 @@ export const deleteRecipe = recipeId => {
 //   }
 // };
 
-// export const getRecipe = () => 
-//   async (dispatch, getState) => {
-//     let today = new Date(Date.now());
-//     const firestore = firebase.firestore();
-//     const recipesQuery = firestore.collection('recipes').where('date', '>=', today);
-//     console.log(recipesQuery);
-//     try {
-//       dispatch(asyncActionStart());
-//       let querySnap = await recipesQuery.get();
-//       let recipes = [];
+export const getRecipe = lastRecipe => async (dispatch, getState) => {
+    let today = new Date(Date.now());
+    console.log(today)
+    const firestore = firebase.firestore();
+    const recipesRef = firestore.collection('recipes');
+   
+    try {
+      dispatch(asyncActionStart());
+      let startAfter = 
+        lastRecipe && 
+        (await firestore
+          .collection('recipes')
+          .doc(lastRecipe.id)
+          .get());
+      let query;
 
-//       for (let i=0; i > querySnap.docs.length; i++) {
-//         let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id};
-//         recipes.push(evt);
-//       }
-//       dispatch({type: FETCH_RECIPES, payload: {recipes}})
-//       dispatch(asyncActionFinish());
-//       console.log(recipes);
-//     } catch (error) {
-//       console.log(error);
-//       dispatch(asyncActionFinish());
-//     }
-//   }
+      lastRecipe
+        ? (query = recipesRef
+          // .where('createdAt', '>=', today)
+          .orderBy('createdAt')
+          .startAfter(startAfter)
+          .limit(8))
+        : (query = recipesRef
+          // .where('createdAt', '>=', today)
+          .orderBy('createdAt')
+          .limit(8))
+      let querySnap = await query.get();
+
+      if (querySnap.docs.length === 0) {
+        dispatch(asyncActionFinish());
+        return querySnap;
+      }
+
+      let recipes = [];
+
+      for (let i = 0; i < querySnap.docs.length; i++) {
+        let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id};
+        recipes.push(evt);
+      }
+      dispatch({ type: FETCH_RECIPES, payload: {recipes} })
+      dispatch(asyncActionFinish());
+      return querySnap;
+    } catch (error) {
+      console.log(error);
+      dispatch(asyncActionError());
+    }
+  }

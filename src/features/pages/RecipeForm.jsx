@@ -211,7 +211,7 @@ class RecipeForm extends Component {
      
       const newRecipe = {
         ...values,
-        photo: this.state.url || '/assets/photo.jpg'
+        photo: this.state.url || './assets/photo.jpg'
       }
       values = newRecipe;
       console.log(newRecipe)

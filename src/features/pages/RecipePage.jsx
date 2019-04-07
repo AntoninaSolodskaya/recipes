@@ -313,7 +313,7 @@ class RecipePage extends React.Component {
             <LikesBlock>
               <Item>Recipe By:</Item>
               {recipe.author && Object.values(recipe.author).map((author, index) => (
-                <AvatarBlock key={index}  author={author}/>
+                <AvatarBlock key={index}  author={author} />
               ))}
             </LikesBlock>
             {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
