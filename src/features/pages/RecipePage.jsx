@@ -5,6 +5,7 @@ import { toastr } from 'react-redux-toastr';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AvatarBlock from '../components/AvatarBlock';
+import firebase from '../../app/config/firebase';
 
 const RecipeWrap = styled.div`
   min-width: 350px;
@@ -77,7 +78,6 @@ const ButtonWrap = styled.div`
   display: flex;
   margin-top: 15px;
 `;
-
 
 const ItemSection = styled.p`
   font-size: 12px;
@@ -232,8 +232,43 @@ class RecipePage extends React.Component {
     await firestore.unsetListener(`recipes/${match.params.id}`);
   }
 
+  
   render() {
     const { recipe } = this.props;
+    const db = firebase.firestore();
+    let recipeRef = db.collection('recipes').doc(`${recipe.id}`);
+    
+    const transaction = () => {
+        db.runTransaction(recipe => {
+        return recipe.get(recipeRef)
+          .then(doc => {
+            var newLikes = doc.data().likes + 1;
+            recipe.update(recipeRef, { likes: newLikes });
+           
+          });
+          
+      }).then(result => {
+        recipe.likes = result.likes
+        console.log('Transaction success!');
+      }).catch(err => {
+        console.log('Transaction failure:', err);
+      });
+    }
+    
+    const transactionDislikes = () => {
+      db.runTransaction(recipe => {
+        return recipe.get(recipeRef)
+          .then(doc => {
+            var newLikes = doc.data().dislike + 1;
+            recipe.update(recipeRef, { dislike: newLikes });
+          });
+      }).then(result => {
+        console.log('Transaction success!');
+      }).catch(err => {
+        console.log('Transaction failure:', err);
+      });
+    } 
+    
 
     if (recipe) {
       const {
@@ -262,10 +297,10 @@ class RecipePage extends React.Component {
               <LikesBlock>
                 <ItemSection>Vote</ItemSection>
                 <ButtonWrap>
-                  <StyledButton>Like
+                  <StyledButton onClick={transaction}>Like 
                     <Span>{likes}</Span>
                   </StyledButton>
-                  <StyledButton>Dislike
+                  <StyledButton onClick={transactionDislikes}>Dislike
                     <Span>{dislike}</Span>
                   </StyledButton>
                 </ButtonWrap>

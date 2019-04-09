@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import firebase from '../../app/config/firebase';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -114,6 +115,25 @@ class Recipe extends React.Component {
  
   render() {  
     const { recipe, deleteRecipe } = this.props;
+
+    const db = firebase.firestore();
+    let recipeRef = db.collection('recipes').doc(`${recipe.id}`);
+    const transaction = () => {
+      db.runTransaction(recipe => {
+      return recipe.get(recipeRef)
+        .then(doc => {
+          var newLikes = doc.data().likes + 1;
+          recipe.update(recipeRef, { likes: newLikes });
+         
+        });
+        
+    }).then(result => {
+      
+      console.log('Transaction success!');
+    }).catch(err => {
+      console.log('Transaction failure:', err);
+    });
+  }
     return (
       <RecipeSection> 
         <ImageWrap>
@@ -124,7 +144,7 @@ class Recipe extends React.Component {
         </ImageWrap>    
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>
-          <Icon>&#10084;</Icon>
+          <Icon onClick={transaction}>&#10084;</Icon>
         </LikesWrap>
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>

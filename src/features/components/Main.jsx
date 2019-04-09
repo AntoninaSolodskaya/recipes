@@ -2,10 +2,38 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
+import styled from 'styled-components';
 import ImageWrap from '../../features/components/ImageWrap';
 import MainContent from '../pages/MainContent';
 import { deleteRecipe, getRecipe } from '../../app/actions/recipeActions/recipeActions';
 import LoadingComponent from '../../app/layout/LoadingComponent';
+
+const Block = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  @media(max-width: 850px) {
+    justify-content: center;
+  }
+  @media(max-width: 450px) {
+    justify-content: center;
+  }
+`;
+
+const Btn = styled.button`
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #CD8D5F;
+  border: 2px solid #CD8D5F;
+  border-radius: 3px;
+  padding: 10px 20px;
+  margin: 10px 10px;
+  :hover {
+    color: #CD8D5F;
+    border: 2px solid #CD8D5F;
+    background-color: #ffffff;
+  }
+`;
 
 const mapState = state => ({
   recipes: state.recipes,
@@ -45,6 +73,7 @@ class Main extends Component {
     }
   };
 
+
   getNextRecipes = async () => {
     const { recipes } = this.props;
     let lastRecipe = recipes && recipes[recipes.length - 1];
@@ -75,9 +104,11 @@ class Main extends Component {
           moreRecipes={moreRecipes}
           getNextRecipes={this.getNextRecipes}
           deleteRecipe={this.handleDeleteRecipe} 
-          recipes={loadedRecipes}  
+          recipes={loadedRecipes} 
         />
-        <button onClick={this.getNextRecipes} disabled={!this.state.moreRecipes}>More</button>
+        <Block>
+          <Btn onClick={this.getNextRecipes} disabled={!this.state.moreRecipes}>More</Btn>
+        </Block>  
       </React.Fragment>
     );
   }

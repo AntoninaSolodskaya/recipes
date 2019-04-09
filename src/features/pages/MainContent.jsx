@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Recipe from '../components/Recipe';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const RecipesWrap = styled.div`
   max-width: 1140px;
@@ -32,8 +33,7 @@ class MainContent extends React.Component {
                 id={recipe.id}
                 recipe={recipe}
                 deleteRecipe={deleteRecipe} 
-              />
-              
+              />    
           ))}  
         </RecipeBlock>
       </RecipesWrap>

@@ -1,16 +1,9 @@
 import {toastr} from 'react-redux-toastr';
-import { UPDATE_RECIPE, FETCH_RECIPES } from './recipeConstants';
+import { FETCH_RECIPES } from './recipeConstants';
 import { asyncActionStart, asyncActionFinish, asyncActionError } from '../../../features/async/asyncActions';
-import { fetchSampleData } from '../../../features/data/mockApi';
 import { createNewRecipe } from '../helpers';
 import firebase from '../../config/firebase';
 
-// export const fetchRecipes = (recipes) => {
-//   return {
-//     type: FETCH_RECIPES,
-//     payload: recipes
-//   }
-// };
 
 export const createRecipe = recipe => {
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
@@ -86,14 +79,15 @@ export const getRecipe = lastRecipe => async (dispatch, getState) => {
 
       lastRecipe
         ? (query = recipesRef
-          // .where('createdAt', '>=', today)
+          .where('createdAt', '<', today)
           .orderBy('createdAt')
           .startAfter(startAfter)
           .limit(8))
         : (query = recipesRef
-          // .where('createdAt', '>=', today)
+          .where('createdAt', '<', today)
           .orderBy('createdAt')
           .limit(8))
+        
       let querySnap = await query.get();
 
       if (querySnap.docs.length === 0) {
@@ -114,4 +108,4 @@ export const getRecipe = lastRecipe => async (dispatch, getState) => {
       console.log(error);
       dispatch(asyncActionError());
     }
-  }
+  };
