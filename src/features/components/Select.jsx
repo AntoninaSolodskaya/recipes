@@ -89,9 +89,10 @@ class Select extends React.Component {
     isOpen: false
   };
 
-  handleClick = (event) => {
+  handleClick = () => {
     this.setState({isOpen: !this.state.isOpen});
   };
+
   handleChange = (event) =>{
     this.setState({value: event.target.value, isOpen: !this.state.isOpen});
     this.props.changeState(event.target.value);
@@ -130,8 +131,8 @@ class Select extends React.Component {
           {selectWrap}
         </SelectOptionWrap>
       </SelectWrap>
-    )
+    );
   }
-}
+};
 
 export default Select;

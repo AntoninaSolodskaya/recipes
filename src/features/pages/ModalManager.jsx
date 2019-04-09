@@ -1,7 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 import LoginModal from '../auth/login/LoginModal';
-import RegisterModal from '../auth/register/RegisterModal'
+import RegisterModal from '../auth/register/RegisterModal';
 
 const modalLookup = {
   LoginModal,

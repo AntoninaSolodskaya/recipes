@@ -158,7 +158,7 @@ const actions = {
 const mapState = state => ({
   auth: state.firebase.auth,
   profile: state.firebase.profile
-})
+});
 
 class Header extends React.Component {
 
@@ -220,6 +220,6 @@ class Header extends React.Component {
       </HeaderBlock>
     );
   }
-}
+};
 
 export default withRouter(withFirebase(connect(mapState, actions)(Header)));

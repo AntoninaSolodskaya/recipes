@@ -9,7 +9,7 @@ export const createNewRecipe = ( user, photoURL, recipe ) => {
   return {
     ...recipe,
     createdAt: new Date(),
-    // likes: 0,
+    likes: 0,
     dislike: 0,
     author: {  
       [user.uid]: {

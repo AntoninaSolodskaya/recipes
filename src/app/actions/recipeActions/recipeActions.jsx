@@ -36,76 +36,50 @@ export const updateRecipe = recipe => {
   };
 };
 
-export const deleteRecipe = recipeId => {
-  return async (dispatch, getState, {getFirestore}) => {
-    const firestore = getFirestore();
-    try {
-      await firestore.delete(`recipes/${recipeId}`)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
-
-// export const loadRecipes = () => {
-//   return async dispatch => {
-//     try {
-//       dispatch(asyncActionStart())
-//       let recipes = await fetchSampleData();
-//       dispatch(fetchRecipes(recipes))
-//       dispatch(asyncActionFinish());
-//     } catch (error) {
-//       console.log(error);
-//       dispatch(asyncActionError());
-//     }
-//   }
-// };
-
 export const getRecipe = lastRecipe => async (dispatch, getState) => {
-    let today = new Date(Date.now());
-    console.log(today)
-    const firestore = firebase.firestore();
-    const recipesRef = firestore.collection('recipes');
+  let today = new Date(Date.now());
+  const firestore = firebase.firestore();
+  const recipesRef = firestore.collection('recipes');
    
-    try {
-      dispatch(asyncActionStart());
-      let startAfter = 
-        lastRecipe && 
-        (await firestore
-          .collection('recipes')
-          .doc(lastRecipe.id)
-          .get());
-      let query;
+  try {
+    dispatch(asyncActionStart());
+    let startAfter = 
+      lastRecipe && 
+      (await firestore
+        .collection('recipes')
+        .doc(lastRecipe.id)
+        .get());
+    let query;
 
-      lastRecipe
-        ? (query = recipesRef
-          .where('createdAt', '<', today)
-          .orderBy('createdAt')
-          .startAfter(startAfter)
-          .limit(8))
-        : (query = recipesRef
-          .where('createdAt', '<', today)
-          .orderBy('createdAt')
-          .limit(8))
-        
-      let querySnap = await query.get();
+    lastRecipe
+      ? (query = recipesRef
+        .where('createdAt', '<', today)
+        .orderBy('createdAt')
+        .startAfter(startAfter)
+        .limit(8))
+      : (query = recipesRef
+        .where('createdAt', '<', today)
+        .orderBy('createdAt')
+        .limit(8))
+      
+    let querySnap = await query.get();
 
-      if (querySnap.docs.length === 0) {
-        dispatch(asyncActionFinish());
-        return querySnap;
-      }
-
-      let recipes = [];
-
-      for (let i = 0; i < querySnap.docs.length; i++) {
-        let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id};
-        recipes.push(evt);
-      }
-      dispatch({ type: FETCH_RECIPES, payload: {recipes} })
+    if (querySnap.docs.length === 0) {
       dispatch(asyncActionFinish());
       return querySnap;
-    } catch (error) {
-      console.log(error);
-      dispatch(asyncActionError());
     }
-  };
+
+    let recipes = [];
+
+    for (let i = 0; i < querySnap.docs.length; i++) {
+      let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id};
+      recipes.push(evt);
+    }
+    dispatch({ type: FETCH_RECIPES, payload: {recipes} })
+    dispatch(asyncActionFinish());
+    return querySnap;
+  } catch (error) {
+    console.log(error);
+    dispatch(asyncActionError());
+  }
+};

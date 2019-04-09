@@ -43,13 +43,13 @@ class BlogPage extends React.Component {
 
   componentDidMount() {
     this.setBlog(this.props.match.params.blogId);
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.match.params.recipeId !== nextProps.match.params.recipeId) {
       this.setBlog(nextProps.match.params.recipeId);
     }
-  }
+  };
 
   render() {
     const { article } = this.state;

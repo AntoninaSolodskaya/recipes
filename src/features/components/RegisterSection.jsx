@@ -47,6 +47,6 @@ const RegisterSection = ({signIn, register}) => {
       </List>
     </SocialLinks>
   )
-}
+};
 
-export default RegisterSection
+export default RegisterSection;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import firebase from '../../app/config/firebase';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -99,41 +98,9 @@ const Time = styled.div`
 
 const Ingredient = Time.withComponent('div');
 
-const Button = styled.button`
-  text-decoration: none;
-  text-align: center; 
-  padding: 3px 3px; 
-  border: solid 1px #998d8d; 
-  border-radius: 5px; 
-  color: #9e8d8d; 
-  background-color: #ffffff; 
-  font-family: 'Montserrat', sans-serif;
-`;
-
-
 class Recipe extends React.Component {
- 
   render() {  
-    const { recipe, deleteRecipe } = this.props;
-
-    const db = firebase.firestore();
-    let recipeRef = db.collection('recipes').doc(`${recipe.id}`);
-    const transaction = () => {
-      db.runTransaction(recipe => {
-      return recipe.get(recipeRef)
-        .then(doc => {
-          var newLikes = doc.data().likes + 1;
-          recipe.update(recipeRef, { likes: newLikes });
-         
-        });
-        
-    }).then(result => {
-      
-      console.log('Transaction success!');
-    }).catch(err => {
-      console.log('Transaction failure:', err);
-    });
-  }
+    const { recipe } = this.props;
     return (
       <RecipeSection> 
         <ImageWrap>
@@ -144,20 +111,19 @@ class Recipe extends React.Component {
         </ImageWrap>    
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>
-          <Icon onClick={transaction}>&#10084;</Icon>
+          <Icon style={{ marginRight: "15px" }}>&#10084;</Icon>
+          <Likes>{recipe.dislike}</Likes>
+          <Icon style={{ fontSize: "25px"}}>&#9785;</Icon>
         </LikesWrap>
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>
-
         <TimeSection>
           <Time>{recipe.cookTime}min</Time>
           <Ingredient>{recipe.servings}ingredients</Ingredient>
         </TimeSection>  
-        <TimeSection>
-          <Button onClick={deleteRecipe(recipe.id)}>Delete</Button>
-        </TimeSection>
       </RecipeSection>
-    )};
-  }; 
+    );
+  }
+}; 
 
 export default Recipe;

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Recipe from '../components/Recipe';
-import InfiniteScroll from 'react-infinite-scroller';
 
 const RecipesWrap = styled.div`
   max-width: 1140px;
@@ -18,11 +17,9 @@ const RecipeBlock = styled.div`
   padding: 20px 5px;
 `;
 
-
 class MainContent extends React.Component {
-
   render() {
-    const { recipes, deleteRecipe } = this.props;
+    const { recipes } = this.props;
     return(
       <RecipesWrap>
         <RecipeBlock> 
@@ -32,13 +29,12 @@ class MainContent extends React.Component {
                 key={index}
                 id={recipe.id}
                 recipe={recipe}
-                deleteRecipe={deleteRecipe} 
               />    
           ))}  
         </RecipeBlock>
       </RecipesWrap>
     );
   }
-}
-
+};
+     
 export default MainContent;

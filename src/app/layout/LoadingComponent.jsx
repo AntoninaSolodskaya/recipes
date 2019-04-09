@@ -26,7 +26,6 @@ const Span = styled.span`
   padding-top: 20px;
 `;
 
-
 const LoadingComponent = () => {
   return (
     <Wrapper>
@@ -40,6 +39,6 @@ const LoadingComponent = () => {
       </Container>
     </Wrapper>
   )
-}
+};
 
 export default LoadingComponent;

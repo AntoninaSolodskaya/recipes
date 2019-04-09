@@ -33,8 +33,6 @@ const Span = styled.span`
   font-weight: bold;
 `;
 
-
-
 class Avatar extends React.Component {
   render() {
     const {author} = this.props;
@@ -48,6 +46,6 @@ class Avatar extends React.Component {
       </Block>
     );
   }
-}
+};
 
 export default Avatar;

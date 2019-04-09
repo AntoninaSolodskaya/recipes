@@ -89,9 +89,11 @@ const Button = ItemSection.withComponent('button');
 
 const StyledButton = Button.extend`
   display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 14px;
   font-family: sans-serif;
-  padding: 5px 8px;
+  padding: 0 8px;
   margin-right: 5px;
   cursor: pointer;
   background: initial;
@@ -197,8 +199,28 @@ const ContextList = styled.span`
   margin: 8px 0;
 `;
 
+const Block = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  @media(max-width: 850px) {
+    justify-content: center;
+  }
+  @media(max-width: 450px) {
+    justify-content: center;
+  }
+`;
+
 const BtnForm = styled(Link)`
-  
+  font-size: 15px;
+  color: #CD8D5F;
+  border: 2px solid #CD8D5F;
+  border-radius: 4px;
+  text-decoration: none;
+  outline: none;
+  max-width: 126px;
+  padding: 8px 8px;
+  margin-top: 15px; 
 `;
 
 const mapState = (state, ownProps) => {
@@ -225,54 +247,49 @@ class RecipePage extends React.Component {
       history.push('/recipes');
       toastr.error('Sorry', 'Recipe not found')
     }
-  }
+  };
 
   async componentWillUnmount() {
     const { firestore, match } = this.props;
     await firestore.unsetListener(`recipes/${match.params.id}`);
-  }
+  };
 
-  
   render() {
     const { recipe } = this.props;
     const db = firebase.firestore();
     let recipeRef = db.collection('recipes').doc(`${recipe.id}`);
     
     const transaction = () => {
-        db.runTransaction(recipe => {
-        return recipe.get(recipeRef)
-          .then(doc => {
-            var newLikes = doc.data().likes + 1;
-            recipe.update(recipeRef, { likes: newLikes });
-           
-          });
-          
+      db.runTransaction(recipe => {
+      return recipe.get(recipeRef)
+        .then(doc => {
+          var newLikes = doc.data().likes + 1;
+          recipe.update(recipeRef, { likes: newLikes }); 
+        });   
       }).then(result => {
-        recipe.likes = result.likes
         console.log('Transaction success!');
       }).catch(err => {
         console.log('Transaction failure:', err);
       });
-    }
+    };
     
     const transactionDislikes = () => {
       db.runTransaction(recipe => {
-        return recipe.get(recipeRef)
-          .then(doc => {
-            var newLikes = doc.data().dislike + 1;
-            recipe.update(recipeRef, { dislike: newLikes });
-          });
+      return recipe.get(recipeRef)
+        .then(doc => {
+          var newLikes = doc.data().dislike + 1;
+          recipe.update(recipeRef, { dislike: newLikes });
+        });
       }).then(result => {
         console.log('Transaction success!');
       }).catch(err => {
         console.log('Transaction failure:', err);
       });
-    } 
-    
+    };
 
     if (recipe) {
       const {
-        title, likes, course, skill, cuisine, dislike, servings, prepTime, cookTime, description, photo
+        title, course, skill, cuisine, servings, prepTime, cookTime, description, photo
       } = recipe;
 
       return (
@@ -284,24 +301,24 @@ class RecipePage extends React.Component {
             <BlockWrap>
               <TimeBlock>
                 <ItemSection>Servings</ItemSection>
-                <Span>{servings}</Span>
+                <Span>{servings}min</Span>
               </TimeBlock>
               <TimeBlock>
                 <ItemSection>Prep</ItemSection>
-                <Span>{prepTime}</Span>
+                <Span>{prepTime}min</Span>
               </TimeBlock>
               <TimeBlock>
                 <ItemSection>Cook</ItemSection>
-                <Span>{cookTime}</Span>
+                <Span>{cookTime}min</Span>
               </TimeBlock>
               <LikesBlock>
                 <ItemSection>Vote</ItemSection>
                 <ButtonWrap>
-                  <StyledButton onClick={transaction}>Like 
-                    <Span>{likes}</Span>
+                  <StyledButton style={{ padding: "0 15px" }} onClick={transaction}>Like 
+                    <Span style={{ fontSize: "20px", marginLeft: "10px" }}>&#10084;</Span>
                   </StyledButton>
-                  <StyledButton onClick={transactionDislikes}>Dislike
-                    <Span>{dislike}</Span>
+                  <StyledButton onClick={transactionDislikes}>Dislike 
+                    <Span style={{ fontSize: "25px", marginLeft: "10px" }}>&#9785;</Span>
                   </StyledButton>
                 </ButtonWrap>
               </LikesBlock>
@@ -351,9 +368,9 @@ class RecipePage extends React.Component {
                 <AvatarBlock key={index}  author={author} />
               ))}
             </LikesBlock>
-            {/* <AvatarBlock tags={recipe.tags} author={recipe.author} title="Recipe By" /> */}
-              
-            <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
+            <Block>
+              <BtnForm to={`/manage/${recipe.id}`}>Manage Recipe</BtnForm>
+            </Block>
           </MainContentWrap>
         </RecipeWrap>
       );
@@ -362,6 +379,6 @@ class RecipePage extends React.Component {
       <div></div>
     );
   }
-}
+};
 
 export default withFirestore(connect(mapState)(RecipePage));

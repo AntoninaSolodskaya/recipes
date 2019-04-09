@@ -27,9 +27,7 @@ class ContentMembersPage extends React.Component {
     const {recipes} = this.props;
     return (
       <ContainerWrap className="theme-color">
-        
         {recipes && recipes.map((recipe, index) => (
-         
           <Block key={index} recipe={recipe}>
             {recipe.author && Object.values(recipe.author).map((author, index) => (
               <AvatarBlock key={index}  author={author} />
@@ -39,6 +37,6 @@ class ContentMembersPage extends React.Component {
       </ContainerWrap>
     );
   }
-}
+};
 
 export default ContentMembersPage;

@@ -5,7 +5,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import styled from 'styled-components';
 import ImageWrap from '../../features/components/ImageWrap';
 import MainContent from '../pages/MainContent';
-import { deleteRecipe, getRecipe } from '../../app/actions/recipeActions/recipeActions';
+import { getRecipe } from '../../app/actions/recipeActions/recipeActions';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const Block = styled.div`
@@ -41,9 +41,8 @@ const mapState = state => ({
 });
 
 const actions = {
-  deleteRecipe,
   getRecipe
-}
+};
 
 class Main extends Component {
 
@@ -73,7 +72,6 @@ class Main extends Component {
     }
   };
 
-
   getNextRecipes = async () => {
     const { recipes } = this.props;
     let lastRecipe = recipes && recipes[recipes.length - 1];
@@ -85,10 +83,6 @@ class Main extends Component {
         moreRecipes: false
       });
     }
-  };
-
-  handleDeleteRecipe = (recipeId) => () => {
-    this.props.deleteRecipe(recipeId);
   };
 
   render(){
@@ -103,7 +97,6 @@ class Main extends Component {
           loading={loading}
           moreRecipes={moreRecipes}
           getNextRecipes={this.getNextRecipes}
-          deleteRecipe={this.handleDeleteRecipe} 
           recipes={loadedRecipes} 
         />
         <Block>

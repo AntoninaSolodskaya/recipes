@@ -72,6 +72,7 @@ const Img = styled.img`
   height: 30px;
   margin-left: 25px;
 `;
+
 class FileInput extends Component{
   render() {
     const { input, label, paragraph, input: {onChange}, url, meta: {touched, error}, ...inputProps } = this.props  

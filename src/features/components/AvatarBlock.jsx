@@ -34,7 +34,6 @@ class AvatarBlock extends React.Component {
   render() {
     const { author } = this.props;
     let newDate = author.joinDate;
-
     return (
       <ContentBlock>
         <AvatarSection style={{ background: `url(${author.photoURL})no-repeat center/cover` }} />
@@ -43,6 +42,6 @@ class AvatarBlock extends React.Component {
       </ContentBlock>
     );
   }
-}
+};
 
 export default AvatarBlock;

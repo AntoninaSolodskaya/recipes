@@ -42,11 +42,11 @@ const Image = styled.div`
     content: "";
     display: block;
     padding-top: 50%;
-    }
+  }
     @media(max-width: 450px) {
     width: 90%;
     margin: 0 auto;
-    }
+  }
 `;
 
 const PreviewText = styled.div`
@@ -86,5 +86,6 @@ class ContentBlogPage extends React.Component {
       </ContentBlock>
     );
   }
-}
+};
+
 export default ContentBlogPage;

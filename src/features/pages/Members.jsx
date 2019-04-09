@@ -38,7 +38,7 @@ class Members extends React.Component {
       </BlogWrap>
     );
   }
-}
+};
 
 export default compose(connect(mapState, null)(
   firestoreConnect([

@@ -48,6 +48,6 @@ const AuthenticateSection = ({ signOut, profile }) => {
       <Title>{profile.displayName}</Title>
     </Container>
   )
-}
+};
 
 export default AuthenticateSection;

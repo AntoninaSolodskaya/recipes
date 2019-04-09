@@ -11,10 +11,10 @@ export const login = creds => {
       console.log(error);
       throw new SubmissionError({
         _error: 'Login failed'
-      })
+      });
     }
   }
-} 
+};
 
 export const registerUser = user => 
   async (dispatch, getState, {getFirebase, getFirestore}) => {
@@ -36,7 +36,7 @@ export const registerUser = user =>
       console.log(error)
       throw new SubmissionError({
         _error: error.message
-      })
+      });
     }
   };
 
@@ -60,4 +60,4 @@ export const registerUser = user =>
     } catch (error) {
       console.log(error)
     }
-  }
+  };
