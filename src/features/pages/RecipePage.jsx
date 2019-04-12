@@ -6,11 +6,12 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AvatarBlock from '../components/AvatarBlock';
 import firebase from '../../app/config/firebase';
+import { darkLikes, darkDislikes } from '../../icons';
 
 const RecipeWrap = styled.div`
   min-width: 350px;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 20px;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -45,7 +46,7 @@ const MainContentWrap = styled.div`
   max-width: 700px;
   min-width: 595px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 40px;
   display: flex;
   flex-direction: column;
   font-size: 16px;
@@ -145,7 +146,7 @@ const ListWrap = styled.ul`
   padding: 0;
   @media(max-width: 450px) {
     width: 100%;
-    text-align: center;
+    text-align: flex-start;
   }
 `;
 
@@ -315,10 +316,10 @@ class RecipePage extends React.Component {
                 <ItemSection>Vote</ItemSection>
                 <ButtonWrap>
                   <StyledButton style={{ padding: "0 15px" }} onClick={transaction}>Like 
-                    <Span style={{ fontSize: "20px", marginLeft: "10px" }}>&#10084;</Span>
+                    <Span style={{ marginLeft: "10px" }}>{darkLikes}</Span>
                   </StyledButton>
                   <StyledButton onClick={transactionDislikes}>Dislike 
-                    <Span style={{ fontSize: "25px", marginLeft: "10px" }}>&#9785;</Span>
+                    <Span style={{ marginLeft: "10px" }}>{darkDislikes}</Span>
                   </StyledButton>
                 </ButtonWrap>
               </LikesBlock>

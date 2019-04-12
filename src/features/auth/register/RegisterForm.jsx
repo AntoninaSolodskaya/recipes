@@ -16,12 +16,15 @@ const Form = styled.form`
 `;
 
 const WrapField = styled(Block)`
-  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 40px;
+  min-width: 100%;
 `;
 
 const Section = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const Label = styled.label`
@@ -65,6 +68,7 @@ const LabelError = styled.label`
 
 const Input = styled.input`
   min-height: 35px;
+  width: 100%;
   @media(max-width: 450px) {
     width: 100%;
   }

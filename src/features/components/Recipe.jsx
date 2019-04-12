@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { likes, dislikes } from '../../icons';
 
 const RecipeSection = styled.div`
   width: calc(25% - 16px);
@@ -111,9 +112,9 @@ class Recipe extends React.Component {
         </ImageWrap>    
         <LikesWrap>
           <Likes>{recipe.likes}</Likes>
-          <Icon style={{ marginRight: "15px" }}>&#10084;</Icon>
+          <Icon>{likes}</Icon>
           <Likes>{recipe.dislike}</Likes>
-          <Icon style={{ fontSize: "25px"}}>&#9785;</Icon>
+          <Icon>{dislikes}</Icon>
         </LikesWrap>
         <TitleLink to={`/recipes/${recipe.id}`}>{recipe.title}</TitleLink>
         <StyledParagraph>{recipe.tags}</StyledParagraph>

@@ -7,6 +7,7 @@ const FooterWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   min-height: 100px;
+  margin: 0 20px;
 `;
 
 const Block = styled(FooterWrap)`

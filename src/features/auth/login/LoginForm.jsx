@@ -19,8 +19,8 @@ const Container = styled.div`
 
 const Section = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Label = styled.label`
@@ -91,7 +91,7 @@ const actions = {
 const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
   return (
     <Block>
-      <form onSubmit={handleSubmit(login)} style={{ width: '100%'}}>
+      <form onSubmit={handleSubmit(login)} style={{ width: '100%', display: 'flex', flexDirection: 'column'}}>
         <Container>
           <Section>
             <Label>Email:</Label>

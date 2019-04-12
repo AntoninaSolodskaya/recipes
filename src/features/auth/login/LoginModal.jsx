@@ -19,7 +19,7 @@ const ModalWrap = styled.div`
 
 const Modal = styled.div`
   max-width: 430px;
-  max-height: 430px;
+  max-height: 480px;
   height: 100%;
   width: 100%;
   background: #CD8D5F;
@@ -45,7 +45,6 @@ const Title = styled.h1`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 `;
 
 const actions = { closeModal };
